@@ -44,7 +44,7 @@ const PostView = (props: PostWithUser) => {
   const { post, author } = props
 
   return (
-    <div className="flex border-b border-slate-400 p-4" key={post.id}>
+    <div className="flex space-x-3 border-b border-slate-400 p-4" key={post.id}>
       <Image
         src={author.profileImageUrl}
         alt={`@${author.username}'s profile picture`}
@@ -53,13 +53,13 @@ const PostView = (props: PostWithUser) => {
         height={56}
       />
       <div className="flex flex-col">
-        <div className="flex gap-1 text-slate-300">
+        <div className="flex gap-1 text-slate-300 ">
           <span>{`@${author.username}`}</span>
           <span className="font-thin">{` · ${dayjs(
             post.createdAt
           ).fromNow()}`}</span>
         </div>
-        <span>{post.content}</span>
+        <span className="text-2xl">{post.content}</span>
       </div>
     </div>
   )
