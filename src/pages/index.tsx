@@ -40,6 +40,7 @@ const CreatPostWizard = () => {
 type PostWithUser = RouterOutputs["posts"]["getAll"][number]
 // a component that will display the full post with all the data including author info that is
 // fetched from the server
+
 const PostView = (props: PostWithUser) => {
   const { post, author } = props
 
