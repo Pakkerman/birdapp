@@ -10,6 +10,8 @@ import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
 import Image from "next/image"
 
+import { LoadingPage } from "~/components/Loading"
+
 dayjs.extend(relativeTime)
 
 const CreatPostWizard = () => {
@@ -63,12 +65,30 @@ const PostView = (props: PostWithUser) => {
   )
 }
 
-const Home: NextPage = () => {
-  const user = useUser()
-  const { data, isLoading } = api.posts.getAll.useQuery()
+const Feed = () => {
+  const { data, isLoading: postsLoading } = api.posts.getAll.useQuery()
 
-  if (isLoading) return <div>Loading...</div>
-  if (!data) return <div>Something Went Wrong</div>
+  if (postsLoading) return <LoadingPage />
+
+  if (!data) return <div>somehting went wrong</div>
+
+  return (
+    <div className="flex flex-col">
+      {data.map((fullpost) => (
+        <PostView {...fullpost} key={fullpost.post.id} />
+      ))}
+    </div>
+  )
+}
+
+const Home: NextPage = () => {
+  const { isLoaded: userLoaded, isSignedIn } = useUser()
+
+  // start fetch asap, and the result will be cache by react query
+  api.posts.getAll.useQuery()
+
+  // Return empty div if user isn't loaded
+  if (!userLoaded) return <div />
 
   return (
     <>
@@ -81,17 +101,12 @@ const Home: NextPage = () => {
         <div className="w-full border-x border-slate-400 md:max-w-2xl">
           <div className="flex  border-b border-slate-400 p-4">
             <div className="flex justify-center">
-              {!user.isSignedIn && <SignInButton />}
+              {!isSignedIn && <SignInButton />}
             </div>
-            {!!user.isSignedIn && <CreatPostWizard />}
+            {isSignedIn && <CreatPostWizard />}
           </div>
-          <div className="flex flex-col">
-            {data.map((fullpost) => (
-              <PostView {...fullpost} key={fullpost.post.id} />
-            ))}
-          </div>
+          <Feed />
         </div>
-        <SignIn path="/sign-in" routing="path" signUpUrl="/sign-up" />
       </main>
     </>
   )
