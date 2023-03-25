@@ -27,10 +27,7 @@ import { prisma } from "~/server/db"
 export const createTRPCContext = (opts: CreateNextContextOptions) => {
   const { req } = opts
   const sesh = getAuth(req)
-
   const userId = sesh.userId
-
-  console.log("sesh :>> ", sesh)
 
   return {
     prisma,
