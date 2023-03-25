@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { SignIn, SignInButton, SignOutButton, useUser } from "@clerk/nextjs"
 import { type NextPage } from "next"
 import Head from "next/head"
@@ -17,6 +18,10 @@ dayjs.extend(relativeTime)
 const CreatPostWizard = () => {
   const { user } = useUser()
 
+  const [input, setInput] = useState<string>("")
+
+  const { mutate } = api.posts.create.useMutation()
+
   if (!user) return null
 
   return (
@@ -31,7 +36,11 @@ const CreatPostWizard = () => {
       <input
         placeholder="Say something in emoji!"
         className="grow bg-transparent outline-none"
+        type="text"
+        value={input}
+        onChange={(event) => setInput(event.target.value)}
       />
+      <button onClick={() => mutate({ content: input })}>Post</button>
     </div>
   )
 }
