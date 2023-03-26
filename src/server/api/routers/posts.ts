@@ -18,13 +18,13 @@ const filterUserForClient = (user: User) => {
   }
 }
 
-import { Ratelimit } from "@upstash/ratelimit" // for deno: see above
+import { Ratelimit } from "@upstash/ratelimit"
 import { Redis } from "@upstash/redis"
 
-// Create a new ratelimiter, that allows 1 requests per 20 seconds
+// Create a new ratelimiter, that allows 10 requests per 10 seconds
 const ratelimit = new Ratelimit({
   redis: Redis.fromEnv(),
-  limiter: Ratelimit.slidingWindow(1, "20 s"),
+  limiter: Ratelimit.slidingWindow(2, "10 s"),
   analytics: true,
 })
 
@@ -64,7 +64,9 @@ export const postsRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const authorId = ctx.userId
 
-      // Handle ratelimit,
+      console.log("mutation fired")
+
+      // Handle ratelimit
       const { success } = await ratelimit.limit(authorId)
       if (!success) throw new TRPCError({ code: "TOO_MANY_REQUESTS" })
 
