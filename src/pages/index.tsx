@@ -20,7 +20,15 @@ const CreatPostWizard = () => {
 
   const [input, setInput] = useState<string>("")
 
-  const { mutate } = api.posts.create.useMutation()
+  const ctx = api.useContext()
+
+  const { mutate, isLoading: isPosting } = api.posts.create.useMutation({
+    onSuccess: () => {
+      setInput("")
+      // trash the previous fetched cache and get new one
+      void ctx.posts.getAll.invalidate()
+    },
+  })
 
   if (!user) return null
 
@@ -39,6 +47,7 @@ const CreatPostWizard = () => {
         type="text"
         value={input}
         onChange={(event) => setInput(event.target.value)}
+        disabled={isPosting}
       />
       <button onClick={() => mutate({ content: input })}>Post</button>
     </div>
