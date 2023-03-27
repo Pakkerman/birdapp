@@ -13,6 +13,7 @@ import type { RouterOutputs } from "~/utils/api"
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
 import toast from "react-hot-toast"
+import { PageLayout } from "~/components/layout"
 
 dayjs.extend(relativeTime)
 
@@ -143,17 +144,17 @@ const Home: NextPage = () => {
   if (!userLoaded) return <div />
 
   return (
-    <main className="flex h-screen justify-center">
-      <div className="w-full border-x border-slate-400 md:max-w-2xl">
-        <div className="flex  border-b border-slate-400 p-4">
+    <PageLayout>
+      <div className="flex border-b border-slate-400 p-4">
+        {!isSignedIn && (
           <div className="flex justify-center">
-            {!isSignedIn && <SignInButton />}
+            <SignInButton />
           </div>
-          {isSignedIn && <CreatPostWizard />}
-        </div>
-        <Feed />
+        )}
+        {isSignedIn && <CreatPostWizard />}
       </div>
-    </main>
+      <Feed />
+    </PageLayout>
   )
 }
 
