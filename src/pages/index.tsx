@@ -1,9 +1,11 @@
-import { useState } from "react"
 import { SignIn, SignInButton, SignOutButton, useUser } from "@clerk/nextjs"
+
 import { type NextPage } from "next"
 import Head from "next/head"
 import Link from "next/link"
+import Image from "next/image"
 
+import { useState } from "react"
 import { LoadingPage, LoadingSpinner } from "~/components/loading"
 
 import { api } from "~/utils/api"
@@ -11,7 +13,7 @@ import type { RouterOutputs } from "~/utils/api"
 
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
-import Image from "next/image"
+import toast from "react-hot-toast"
 
 dayjs.extend(relativeTime)
 
@@ -27,6 +29,15 @@ const CreatPostWizard = () => {
       setInput("")
       // trash the previous fetched cache and get new one
       void ctx.posts.getAll.invalidate()
+    },
+    onError: (error) => {
+      const errorMessage = error.data?.zodError?.fieldErrors.content
+      console.log("errorMessage", errorMessage)
+      if (errorMessage && errorMessage[0]) {
+        toast.error(errorMessage[0])
+      } else {
+        toast.error("Failed to post! Please try again later!")
+      }
     },
   })
 
