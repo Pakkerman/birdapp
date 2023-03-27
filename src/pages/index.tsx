@@ -59,8 +59,27 @@ const CreatPostWizard = () => {
         value={input}
         onChange={(event) => setInput(event.target.value)}
         disabled={isPosting}
+        onKeyDown={(event) => {
+          if (event.key !== "Enter") return
+          if (input === "") return
+          event.preventDefault()
+          mutate({ content: input })
+        }}
       />
-      <button onClick={() => mutate({ content: input })}>Post</button>
+
+      {input !== "" && !isPosting && (
+        <button
+          className=" self-center rounded-md border-2 border-slate-400 p-2"
+          onClick={() => mutate({ content: input })}
+        >
+          Post
+        </button>
+      )}
+      {isPosting && (
+        <div className="flex items-center justify-center">
+          <LoadingSpinner size={30} />
+        </div>
+      )}
     </div>
   )
 }
