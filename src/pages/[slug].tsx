@@ -1,18 +1,25 @@
 import type { GetStaticProps, NextPage } from "next"
 import Image from "next/image"
-
 import Head from "next/head"
+
 import { api } from "~/utils/api"
+import { generateSSGHelper } from "~/server/helpers/ssgHelper"
 
 import { PageLayout } from "~/components/layout"
 import PostView from "~/components/PostView"
+import { LoadingSpinner } from "~/components/loading"
 
 const ProfileFeed = (props: { userId: string }) => {
   const { data, isLoading } = api.posts.getPostsByUserId.useQuery({
     userId: props.userId,
   })
 
-  if (isLoading) return <LoadingSpinner />
+  if (isLoading)
+    return (
+      <div className="flex w-full justify-center py-12">
+        <LoadingSpinner size={64} />
+      </div>
+    )
   if (!data || data.length === 0)
     return <div className="text-xl">There is no post here!</div>
 
@@ -66,18 +73,10 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
     </>
   )
 }
-import { createProxySSGHelpers } from "@trpc/react-query/ssg"
-import { prisma } from "~/server/db"
-import { appRouter } from "~/server/api/root"
-import superjson from "superjson"
-import { LoadingSpinner } from "~/components/loading"
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  const ssg = createProxySSGHelpers({
-    router: appRouter,
-    ctx: { prisma, userId: null },
-    transformer: superjson,
-  })
+  const ssg = generateSSGHelper()
+
   const slug = context.params?.slug
   if (typeof slug !== "string") throw new Error("No slug")
   const username = slug.replace("@", "")
