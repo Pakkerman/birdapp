@@ -5,6 +5,9 @@ import { api } from "~/utils/api"
 import { generateSSGHelper } from "~/server/helpers/ssgHelper"
 import PostView from "~/components/PostView"
 import { PageLayout } from "~/components/layout"
+import Link from "next/link"
+
+import { AiOutlineArrowLeft } from "react-icons/ai"
 
 const SinglePostPage: NextPage<{ id: string }> = ({ id }) => {
   const { data } = api.posts.getById.useQuery({
@@ -25,6 +28,12 @@ const SinglePostPage: NextPage<{ id: string }> = ({ id }) => {
       </Head>
       <main>
         <PageLayout>
+          <Link href="/">
+            <div className="flex items-center p-3">
+              <AiOutlineArrowLeft size={24} />
+              <div className="pl-4 text-2xl font-semibold">Thread</div>
+            </div>
+          </Link>
           <PostView {...data} />
         </PageLayout>
       </main>
