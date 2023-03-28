@@ -11,6 +11,9 @@ import { LoadingPage, LoadingSpinner } from "~/components/loading"
 import PostView from "~/components/PostView"
 import toast from "react-hot-toast"
 
+import { GiKiwiBird } from "react-icons/gi"
+import { FaHashtag, FaInfo } from "react-icons/fa"
+
 const CreatPostWizard = () => {
   const { user } = useUser()
 
@@ -38,7 +41,7 @@ const CreatPostWizard = () => {
   if (!user) return null
 
   return (
-    <div className="flex w-full gap-3 ">
+    <div className="flex w-full gap-3">
       <Image
         className="h-14 w-14 rounded-full"
         src={user.profileImageUrl}
@@ -63,7 +66,7 @@ const CreatPostWizard = () => {
 
       {input !== "" && !isPosting && (
         <button
-          className=" self-center rounded-md border-2 border-slate-400 p-2"
+          className="self-center rounded-md border-2 border-slate-400 p-2"
           onClick={() => mutate({ content: input })}
         >
           Post
@@ -104,17 +107,19 @@ const Home: NextPage = () => {
   if (!userLoaded) return <div />
 
   return (
-    <PageLayout>
-      <div className="flex border-b border-slate-400 p-4">
-        {!isSignedIn && (
-          <div className="flex justify-center">
-            <SignInButton />
-          </div>
-        )}
-        {isSignedIn && <CreatPostWizard />}
-      </div>
-      <Feed />
-    </PageLayout>
+    <>
+      <PageLayout>
+        <div className="border-b border-slate-600 p-4">
+          {!isSignedIn && (
+            <div className="flex justify-center">
+              <SignInButton />
+            </div>
+          )}
+          {isSignedIn && <CreatPostWizard />}
+        </div>
+        <Feed />
+      </PageLayout>
+    </>
   )
 }
 

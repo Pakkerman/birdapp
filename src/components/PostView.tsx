@@ -17,7 +17,7 @@ const PostView = (props: PostWithUser) => {
   const { post, author } = props
 
   return (
-    <div className="flex space-x-3 border-b border-slate-400 p-4" key={post.id}>
+    <div className="flex space-x-3 border-b border-slate-600 p-4" key={post.id}>
       <Image
         src={author.profileImageUrl}
         alt={`@${author.username}'s profile picture`}
