@@ -4,11 +4,13 @@ import Link from "next/link"
 import Image from "next/image"
 import { FaHashtag, FaInfo } from "react-icons/fa"
 import { GiChicken } from "react-icons/gi"
+import { LoadingSpinner } from "./loading"
 
 const Profile = () => {
-  const { user } = useUser()
+  const { user, isLoaded } = useUser()
 
-  if (!user) return null
+  if (!isLoaded) return <LoadingSpinner />
+  if (!user?.username || user?.profileImageUrl) return <div>User not found</div>
 
   return (
     <Link href={`/@${user.username}`}>
@@ -16,15 +18,15 @@ const Profile = () => {
         <div className="  flex h-full w-16 items-center justify-center lg:w-10">
           <Image
             className="rounded-full"
-            src={user?.profileImageUrl}
-            alt={`${user?.username}'s profile image`}
+            src={user.profileImageUrl}
+            alt={`${user.username}'s profile image`}
             height={48}
             width={48}
           />
         </div>
         <div className=" hidden h-full items-center justify-center p-1 lg:block">
-          <div className="text-lg">{user?.username}</div>
-          <div className="text-md text-slate-500">{`@${user?.username}`}</div>
+          <div className="text-lg">{user.username}</div>
+          <div className="text-md text-slate-500">{`@${user.username}`}</div>
         </div>
       </div>
     </Link>
