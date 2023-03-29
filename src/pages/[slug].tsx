@@ -9,6 +9,8 @@ import { PageLayout } from "~/components/layout"
 import PostView from "~/components/PostView"
 import { LoadingSpinner } from "~/components/loading"
 
+import { AiOutlineArrowLeft } from "react-icons/ai"
+
 const ProfileFeed = (props: { userId: string }) => {
   const { data, isLoading } = api.posts.getPostsByUserId.useQuery({
     userId: props.userId,
@@ -32,6 +34,22 @@ const ProfileFeed = (props: { userId: string }) => {
   )
 }
 
+const Navbar = (props: { username: string }) => {
+  const { username } = props
+
+  return (
+    <div className="flex h-20 items-center p-3">
+      <AiOutlineArrowLeft size={24} />
+      <div>
+        <div className="pl-4 text-2xl font-semibold">{username}</div>
+        <div className="text-md pl-4 font-semibold text-slate-500">
+          {} Emotes
+        </div>
+      </div>
+    </div>
+  )
+}
+
 const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
   const { data } = api.profile.getUserByUsername.useQuery({
     username,
@@ -49,27 +67,32 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
       <Head>
         <title>{data.username}</title>
       </Head>
-      <PageLayout>
-        <div className="relative h-36  bg-slate-600">
-          <Image
-            src={data.profileImageUrl}
-            alt={`${data.username ?? ""}'s profile pic`}
-            height={128}
-            width={128}
-            className="absolute bottom-0 left-0 -mb-[64px] ml-4 rounded-full border-4 border-black bg-black"
-          />
-        </div>
-        <div className="h-[64px]"></div>
+      <div className="flex w-screen justify-center">
+        <PageLayout>
+          <Navbar username={username} />
+          <div className="relative h-36 bg-slate-600">
+            <Image
+              src={data.profileImageUrl}
+              alt={`${data.username ?? ""}'s profile pic`}
+              height={128}
+              width={128}
+              className="absolute bottom-0 left-0 -mb-[64px] ml-4 rounded-full border-4 border-black bg-black"
+            />
+          </div>
+          <div className="h-[64px]"></div>
 
-        <div className="p-4">
-          <div className=" text-2xl font-bold">{`${data.username ?? ""}`}</div>
-          <div className="text-1xl font-bold text-slate-500">{`@${
-            data.username ?? ""
-          }`}</div>
-        </div>
-        <div className="w-full border-b border-slate-400"></div>
-        <ProfileFeed userId={data.id} />
-      </PageLayout>
+          <div className="p-4">
+            <div className="text-2xl font-bold ">{`${
+              data.username ?? ""
+            }`}</div>
+            <div className="text-1xl font-bold text-slate-500">{`@${
+              data.username ?? ""
+            }`}</div>
+          </div>
+          <div className="w-full border-b border-slate-600"></div>
+          <ProfileFeed userId={data.id} />
+        </PageLayout>
+      </div>
     </>
   )
 }

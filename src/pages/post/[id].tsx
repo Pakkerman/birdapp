@@ -27,15 +27,17 @@ const SinglePostPage: NextPage<{ id: string }> = ({ id }) => {
         <title>{`${data.post.content} - @${data.author.username}`}</title>
       </Head>
       <main>
-        <PageLayout>
-          <Link href="/">
-            <div className="flex items-center p-3">
-              <AiOutlineArrowLeft size={24} />
-              <div className="pl-4 text-2xl font-semibold">Thread</div>
-            </div>
-          </Link>
-          <PostView {...data} />
-        </PageLayout>
+        <div className="flex w-screen justify-center">
+          <PageLayout>
+            <Link href="/">
+              <div className="flex h-20 items-center p-3">
+                <AiOutlineArrowLeft size={24} />
+                <div className="pl-4 text-2xl font-semibold">Thread</div>
+              </div>
+            </Link>
+            <PostView {...data} />
+          </PageLayout>
+        </div>
       </main>
     </>
   )

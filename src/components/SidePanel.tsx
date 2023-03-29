@@ -12,7 +12,7 @@ const Profile = () => {
   if (!isLoaded) {
     return (
       <div className="flex h-20 justify-end space-x-2 pb-4 lg:justify-start lg:pl-8">
-        <div className=" flex h-full w-16 items-center justify-center lg:w-10">
+        <div className="flex h-full w-16 items-center justify-center lg:w-10">
           <LoadingSpinner size={48} />
         </div>
       </div>
@@ -25,17 +25,17 @@ const Profile = () => {
 
   return (
     <Link href={`/@${user.username}`}>
-      <div className="flex h-20 justify-end space-x-2 pb-4 lg:justify-start lg:pl-8">
-        <div className=" flex h-full w-16 items-center justify-center lg:w-10">
+      <div className=" flex h-24 items-center justify-end space-x-2 pb-2 lg:justify-start lg:pl-8">
+        <div className=" flex h-full w-16 items-center justify-center">
           <Image
             className="rounded-full"
             src={user.profileImageUrl}
             alt={`${user.username}'s profile image`}
-            height={48}
-            width={48}
+            height={36}
+            width={36}
           />
         </div>
-        <div className=" hidden h-full items-center justify-center p-1 lg:block">
+        <div className=" hidden h-full pr-2 lg:flex lg:flex-col lg:items-center lg:justify-center">
           <div className="text-lg">{user.username}</div>
           <div className="text-md text-slate-500">{`@${user.username}`}</div>
         </div>
@@ -46,11 +46,11 @@ const Profile = () => {
 
 const SidePanel = () => {
   return (
-    <div className=" flex h-screen flex-col px-1">
+    <div className="flex h-screen flex-col px-1 ">
       <div className="flex h-full flex-col items-end justify-start space-y-6 py-6 lg:items-start lg:pl-8">
         <Link href="/">
           <div className="flex items-center space-x-2">
-            <div className="flex w-16  justify-center lg:w-10">
+            <div className="flex w-16 justify-center lg:w-10">
               <GiChicken size={36} />
             </div>
             <h1 className="hidden text-xl lg:block">Bird App</h1>
@@ -58,7 +58,7 @@ const SidePanel = () => {
         </Link>
 
         <div className="flex items-center space-x-2">
-          <div className="flex w-16  justify-center lg:w-10">
+          <div className="flex w-16 justify-center lg:w-10">
             <FaHashtag size={28} />
           </div>
           <h1 className="hidden text-xl lg:block">Emoji Only</h1>
