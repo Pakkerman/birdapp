@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  @apply bg-stone-900 text-slate-100;
+  @apply w-screen bg-stone-900 text-slate-100;
 
   /* overscroll-behavior: none; */
   /* scrollbar-color: black; */

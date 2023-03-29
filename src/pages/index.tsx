@@ -11,9 +11,6 @@ import { LoadingPage, LoadingSpinner } from "~/components/loading"
 import PostView from "~/components/PostView"
 import toast from "react-hot-toast"
 
-import { GiKiwiBird } from "react-icons/gi"
-import { FaHashtag, FaInfo } from "react-icons/fa"
-
 const CreatPostWizard = () => {
   const { user } = useUser()
 
@@ -108,17 +105,19 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <PageLayout>
-        <div className="border-b border-slate-600 p-4">
-          {!isSignedIn && (
-            <div className="flex justify-center">
-              <SignInButton />
-            </div>
-          )}
-          {isSignedIn && <CreatPostWizard />}
-        </div>
-        <Feed />
-      </PageLayout>
+      <div className="flex w-screen justify-center">
+        <PageLayout>
+          <div className="border-b border-slate-600 p-4">
+            {!isSignedIn && (
+              <div className="flex justify-center">
+                <SignInButton />
+              </div>
+            )}
+            {isSignedIn && <CreatPostWizard />}
+          </div>
+          <Feed />
+        </PageLayout>
+      </div>
     </>
   )
 }
