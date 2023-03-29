@@ -4,18 +4,29 @@ import Link from "next/link"
 import Image from "next/image"
 import { FaHashtag, FaInfo } from "react-icons/fa"
 import { GiChicken } from "react-icons/gi"
-import { LoadingSpinner } from "./loading"
+import { LoadingPage, LoadingSpinner } from "./loading"
 
 const Profile = () => {
   const { user, isLoaded } = useUser()
 
-  if (!isLoaded) return <LoadingSpinner />
-  if (!user?.username || user?.profileImageUrl) return <div>User not found</div>
+  if (!isLoaded) {
+    return (
+      <div className="flex h-20 justify-end space-x-2 pb-4 lg:justify-start lg:pl-8">
+        <div className=" flex h-full w-16 items-center justify-center lg:w-10">
+          <LoadingSpinner size={48} />
+        </div>
+      </div>
+    )
+  }
+
+  if (!user?.username || !user?.profileImageUrl) {
+    return <div>User not found</div>
+  }
 
   return (
     <Link href={`/@${user.username}`}>
       <div className="flex h-20 justify-end space-x-2 pb-4 lg:justify-start lg:pl-8">
-        <div className="  flex h-full w-16 items-center justify-center lg:w-10">
+        <div className=" flex h-full w-16 items-center justify-center lg:w-10">
           <Image
             className="rounded-full"
             src={user.profileImageUrl}
