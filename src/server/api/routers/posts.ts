@@ -25,19 +25,7 @@ const addUserDataToPost = async (posts: Post[]) => {
     })
   ).map(filterUserForClient)
 
-  console.log("users :>> ", users)
-  console.log("object :>> ", await clerkClient.users.getUserList())
-
   return posts.map((post) => {
-    // return {
-    //   post,
-    //   author: {
-    //     id: "test",
-    //     username: "author",
-    //     profileImageUrl:
-    //       "https://images.clerk.dev/oauth_github/img_2Nj5h3Q8WWiFwrNu1NU3gnx5DWq.png",
-    //   },
-    // }
     const author = users.find((user) => user.id === post.authorId)
 
     if (!author || !author.username)

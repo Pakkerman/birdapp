@@ -16,8 +16,11 @@ type PostWithUser = RouterOutputs["posts"]["getAll"][number]
 // a component that will display the full post with all the data including author info that is
 // fetched from the server
 
-const DeletePostWizard = (props: { postId: string }) => {
+const DeletePostWizard = (props: { postId: string; authorId: string }) => {
+  const { user } = useUser()
   const ctx = api.useContext()
+
+  if (!user || user.id != props.authorId) return <div></div>
 
   const { mutate } = api.posts.deletePostById.useMutation({
     onSuccess: () => {
@@ -67,7 +70,7 @@ const PostView = (props: PostWithUser) => {
             </Link>
           </div>
           <div>
-            <DeletePostWizard postId={post.id} />
+            <DeletePostWizard postId={post.id} authorId={author.id} />
           </div>
         </div>
         <span className="text-2xl">{post.content}</span>
