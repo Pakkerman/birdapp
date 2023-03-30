@@ -1,9 +1,10 @@
-import { useUser } from "@clerk/nextjs"
+import { useUser, SignOutButton, SignInButton } from "@clerk/nextjs"
 
 import Link from "next/link"
 import Image from "next/image"
 import { FaHashtag, FaInfo } from "react-icons/fa"
 import { GiChicken } from "react-icons/gi"
+import { BiLogOutCircle } from "react-icons/bi"
 import { LoadingPage, LoadingSpinner } from "./loading"
 
 const Profile = () => {
@@ -20,27 +21,52 @@ const Profile = () => {
   }
 
   if (!user?.username || !user?.profileImageUrl) {
-    return <div>User not found</div>
+    return (
+      <div>
+        <div className=" flex h-14 items-center justify-end space-x-2 pb-2 lg:justify-start lg:pl-8">
+          <div className=" flex w-16 justify-center lg:w-10">
+            <SignOutButton>
+              <BiLogOutCircle size={36} />
+            </SignOutButton>
+          </div>
+          <div className="hidden h-full pr-2 lg:flex lg:flex-col lg:items-center lg:justify-center">
+            <button className="text-lg">SignOut</button>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (
-    <Link href={`/@${user.username}`}>
-      <div className=" flex h-24 items-center justify-end space-x-2 pb-2 lg:justify-start lg:pl-8">
-        <div className="flex w-16 justify-center lg:w-10">
-          <Image
-            className="rounded-full"
-            src={user.profileImageUrl}
-            alt={`${user.username}'s profile image`}
-            height={36}
-            width={36}
-          />
+    <div>
+      <Link href={`/@${user.username}`}>
+        <div className=" flex h-14 items-center justify-end space-x-2 pb-2 lg:justify-start lg:pl-8">
+          <div className=" flex w-16 justify-center lg:w-10">
+            <Image
+              className="rounded-full"
+              src={user.profileImageUrl}
+              alt={`${user.username}'s profile image`}
+              height={36}
+              width={36}
+            />
+          </div>
+          <div className="hidden h-full pr-2 lg:flex lg:flex-col lg:items-center lg:justify-center">
+            <div className="text-lg">{user.username}</div>
+            <div className="text-md text-slate-500">{`@${user.username}`}</div>
+          </div>
         </div>
-        <div className="  hidden h-full pr-2 lg:flex lg:flex-col lg:items-center lg:justify-center">
-          <div className="text-lg">{user.username}</div>
-          <div className="text-md text-slate-500">{`@${user.username}`}</div>
+      </Link>
+      <div className=" flex h-14 items-center justify-end space-x-2 pb-2 lg:justify-start lg:pl-8">
+        <div className=" flex w-16 cursor-pointer justify-center lg:w-10">
+          <SignOutButton>
+            <BiLogOutCircle size={36} />
+          </SignOutButton>
+        </div>
+        <div className="hidden h-full pr-2 lg:flex lg:flex-col lg:items-center lg:justify-center">
+          <div className="text-lg">SignOut</div>
         </div>
       </div>
-    </Link>
+    </div>
   )
 }
 

@@ -25,7 +25,19 @@ const addUserDataToPost = async (posts: Post[]) => {
     })
   ).map(filterUserForClient)
 
+  console.log("users :>> ", users)
+  console.log("object :>> ", await clerkClient.users.getUserList())
+
   return posts.map((post) => {
+    // return {
+    //   post,
+    //   author: {
+    //     id: "test",
+    //     username: "author",
+    //     profileImageUrl:
+    //       "https://images.clerk.dev/oauth_github/img_2Nj5h3Q8WWiFwrNu1NU3gnx5DWq.png",
+    //   },
+    // }
     const author = users.find((user) => user.id === post.authorId)
 
     if (!author || !author.username)
@@ -46,19 +58,12 @@ const ratelimit = new Ratelimit({
 })
 
 export const postsRouter = createTRPCRouter({
-  getById: publicProcedure
-    .input(z.object({ id: z.string() }))
-    .query(async ({ ctx, input }) => {
-      const post = await ctx.prisma.post.findUnique({ where: { id: input.id } })
-      if (!post) throw new TRPCError({ code: "NOT_FOUND" })
-      return (await addUserDataToPost([post]))[0]
-    }),
-
   getAll: publicProcedure.query(async ({ ctx }) => {
     const posts = await ctx.prisma.post.findMany({
       take: 100,
       orderBy: [{ createdAt: "desc" }],
     })
+
     return addUserDataToPost(posts)
   }),
 
@@ -73,6 +78,16 @@ export const postsRouter = createTRPCRouter({
         })
         .then(addUserDataToPost)
     ),
+
+  getById: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const post = await ctx.prisma.post.findUnique({ where: { id: input.id } })
+
+      if (!post) throw new TRPCError({ code: "NOT_FOUND" })
+
+      return (await addUserDataToPost([post]))[0]
+    }),
 
   create: privateProcedure
     .input(
