@@ -10,11 +10,12 @@ import PostView from "~/components/PostView"
 import { LoadingSpinner } from "~/components/loading"
 
 import { AiOutlineArrowLeft } from "react-icons/ai"
+import usePosts from "~/hooks/usePosts"
+import { useRef } from "react"
+import Link from "next/link"
 
 const ProfileFeed = (props: { userId: string }) => {
-  const { data, isLoading } = api.posts.getPostsByUserId.useQuery({
-    userId: props.userId,
-  })
+  const { data, isLoading } = usePosts(props.userId)
 
   if (isLoading)
     return (
@@ -34,16 +35,19 @@ const ProfileFeed = (props: { userId: string }) => {
   )
 }
 
-const Navbar = (props: { username: string }) => {
+const Navbar = (props: { username: string; userId: string }) => {
+  const { data, isLoading } = usePosts(props.userId)
   const { username } = props
 
   return (
     <div className="flex h-20 items-center p-3">
-      <AiOutlineArrowLeft size={24} />
+      <Link href="/">
+        <AiOutlineArrowLeft size={24} />
+      </Link>
       <div>
         <div className="pl-4 text-2xl font-semibold">{username}</div>
         <div className="text-md pl-4 font-semibold text-slate-500">
-          {} Emotes
+          {isLoading ? 0 : data?.length} Emotes
         </div>
       </div>
     </div>
@@ -69,7 +73,7 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
       </Head>
       <div className="flex w-screen justify-center">
         <PageLayout>
-          <Navbar username={username} />
+          <Navbar username={username} userId={data.id} />
           <div className="relative h-36 bg-slate-600">
             <Image
               src={data.profileImageUrl}

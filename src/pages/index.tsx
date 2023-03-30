@@ -64,8 +64,7 @@ const CreatPostWizard = () => {
       {input !== "" && !isPosting && (
         <button
           className="self-center rounded-md border-2 border-slate-400 p-2"
-          onClick={() => mutate({ content: input })}
-        >
+          onClick={() => mutate({ content: input })}>
           Post
         </button>
       )}

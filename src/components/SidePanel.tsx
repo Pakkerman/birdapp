@@ -25,7 +25,7 @@ const Profile = () => {
 
   return (
     <Link href={`/@${user.username}`}>
-      <div className=" flex h-24 items-center justify-end space-x-2 pb-2 lg:justify-start lg:pl-8">
+      <div className="flex h-24 items-center justify-end space-x-2 pb-2 lg:justify-start lg:pl-8">
         <div className=" flex h-full w-16 items-center justify-center">
           <Image
             className="rounded-full"
@@ -46,7 +46,7 @@ const Profile = () => {
 
 const SidePanel = () => {
   return (
-    <div className="flex h-screen flex-col px-1 ">
+    <div className="flex h-screen flex-col px-1">
       <div className="flex h-full flex-col items-end justify-start space-y-6 py-6 lg:items-start lg:pl-8">
         <Link href="/">
           <div className="flex items-center space-x-2">
