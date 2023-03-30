@@ -1,8 +1,8 @@
-import { User } from "@clerk/nextjs/dist/api"
+import type { User } from "@clerk/nextjs/dist/api"
 export const filterUserForClient = (user: User) => {
-  let username =
+  const username =
     user.username === null
-      ? `${user.firstName}${user?.lastName}`
+      ? `${user.firstName ?? ""}${user.lastName ?? ""}`
       : user.username
 
   return {
