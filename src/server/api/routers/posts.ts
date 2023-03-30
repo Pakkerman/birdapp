@@ -13,6 +13,7 @@ import { Ratelimit } from "@upstash/ratelimit"
 import { Redis } from "@upstash/redis"
 import { filterUserForClient } from "~/server/helpers/filterUserForClients"
 import type { Post } from "@prisma/client"
+import { prisma } from "~/server/db"
 
 // Create a new ratelimiter, that allows 10 requests per 10 secs
 
@@ -82,8 +83,6 @@ export const postsRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const authorId = ctx.userId
 
-      console.log("mutation fired")
-
       // Handle ratelimit
       const { success } = await ratelimit.limit(authorId)
       if (!success) throw new TRPCError({ code: "TOO_MANY_REQUESTS" })
@@ -96,5 +95,15 @@ export const postsRouter = createTRPCRouter({
       })
 
       return post
+    }),
+
+  deletePostById: privateProcedure
+    .input(z.object({ postId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const postId = input.postId
+
+      const deletePost = await ctx.prisma.post.delete({ where: { id: postId } })
+
+      return deletePost
     }),
 })

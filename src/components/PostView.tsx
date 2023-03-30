@@ -1,10 +1,13 @@
 import Link from "next/link"
 import Image from "next/image"
 
-import { RouterOutputs } from "~/utils/api"
+import { api, RouterOutputs } from "~/utils/api"
 
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
+import { AiOutlineClose } from "react-icons/ai"
+import toast from "react-hot-toast"
+import { useUser } from "@clerk/nextjs"
 
 dayjs.extend(relativeTime)
 
@@ -12,6 +15,32 @@ dayjs.extend(relativeTime)
 type PostWithUser = RouterOutputs["posts"]["getAll"][number]
 // a component that will display the full post with all the data including author info that is
 // fetched from the server
+
+const DeletePostWizard = (props: { postId: string }) => {
+  const ctx = api.useContext()
+
+  const { mutate } = api.posts.deletePostById.useMutation({
+    onSuccess: () => {
+      toast.success("Post deleted!")
+      void ctx.posts.getAll.invalidate()
+    },
+    onError: (error) => {
+      const errorMessage = error.data?.zodError?.fieldErrors.content
+      console.log("errorMessage", errorMessage)
+      if (errorMessage && errorMessage[0]) {
+        toast.error(errorMessage[0])
+      } else {
+        toast.error("Failed to post! Please try again later!")
+      }
+    },
+  })
+
+  return (
+    <div onClick={() => mutate({ postId: props.postId })}>
+      <AiOutlineClose />
+    </div>
+  )
+}
 
 const PostView = (props: PostWithUser) => {
   const { post, author } = props
@@ -25,16 +54,21 @@ const PostView = (props: PostWithUser) => {
         width={56}
         height={56}
       />
-      <div className="flex flex-col">
-        <div className="flex gap-1 text-slate-300 ">
-          <Link href={`/@${author.username}`}>
-            <span>{`@${author.username}`}</span>
-          </Link>
-          <Link href={`/post/${post.id}`}>
-            <span className="font-thin">{` · ${dayjs(
-              post.createdAt
-            ).fromNow()}`}</span>
-          </Link>
+      <div className="flex w-full flex-col">
+        <div className="view flex items-center justify-between gap-1 text-slate-300">
+          <div>
+            <Link href={`/@${author.username}`}>
+              <span>{`@${author.username}`}</span>
+            </Link>
+            <Link href={`/post/${post.id}`}>
+              <span className="font-thin">{` · ${dayjs(
+                post.createdAt
+              ).fromNow()}`}</span>
+            </Link>
+          </div>
+          <div>
+            <DeletePostWizard postId={post.id} />
+          </div>
         </div>
         <span className="text-2xl">{post.content}</span>
       </div>
