@@ -1,10 +1,12 @@
+@import url("https://fonts.googleapis.com/css2?family=Raleway&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 body {
   @apply w-screen bg-stone-900 text-slate-100;
-
+  font-family: "raleway";
   /* overscroll-behavior: none; */
   /* scrollbar-color: black; */
 }

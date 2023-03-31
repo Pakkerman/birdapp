@@ -1,4 +1,4 @@
-import { SignIn, SignInButton, SignOutButton, useUser } from "@clerk/nextjs"
+import { SignInButton, useUser } from "@clerk/nextjs"
 
 import { type NextPage } from "next"
 import Image from "next/image"
@@ -10,6 +10,7 @@ import { PageLayout } from "~/components/layout"
 import { LoadingPage, LoadingSpinner } from "~/components/loading"
 import PostView from "~/components/PostView"
 import toast from "react-hot-toast"
+import { clerkClient } from "@clerk/nextjs/server"
 
 const CreatPostWizard = () => {
   const { user } = useUser()
@@ -51,7 +52,7 @@ const CreatPostWizard = () => {
         className="grow bg-transparent outline-none"
         type="text"
         value={input}
-        onChange={(event) => setInput(event.target.value)}
+        onChange={(event) => setInput(event.target.value.replaceAll(" ", ""))}
         disabled={isPosting}
         onKeyDown={(event) => {
           if (event.key !== "Enter") return
@@ -94,13 +95,22 @@ const Feed = () => {
 }
 
 const Home: NextPage = () => {
-  const { isLoaded: userLoaded, isSignedIn } = useUser()
+  const { isLoaded: userLoaded, isSignedIn, user } = useUser()
 
   // start fetch asap, and the result will be cache by react query
   api.posts.getAll.useQuery()
 
   // Return empty div if user isn't loaded
   if (!userLoaded) return <div />
+
+  // cannot call clerkclient on the frontend, make a call to the back end and update user there
+
+  // if (user && user.username === null) {
+  //   const updateParams = { username: user?.fullName }
+  //   clerkClient.users
+  //     .updateUser(user?.id, { username: "132" })
+  //     .then((res) => console.log("update"))
+  // }
 
   return (
     <>

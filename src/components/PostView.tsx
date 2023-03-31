@@ -17,7 +17,9 @@ type PostWithUser = RouterOutputs["posts"]["getAll"][number]
 // fetched from the server
 
 const DeletePostWizard = (props: { postId: string; authorId: string }) => {
-  const { user } = useUser()
+  const { isSignedIn, user } = useUser()
+  if (!isSignedIn) return <div></div>
+
   const ctx = api.useContext()
 
   if (!user || user.id != props.authorId) return <div></div>

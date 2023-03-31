@@ -8,7 +8,7 @@ import { BiLogOutCircle } from "react-icons/bi"
 import { LoadingPage, LoadingSpinner } from "./loading"
 
 const Profile = () => {
-  const { user, isLoaded } = useUser()
+  const { isSignedIn, user, isLoaded } = useUser()
 
   if (!isLoaded) {
     return (
@@ -20,7 +20,7 @@ const Profile = () => {
     )
   }
 
-  if (!user?.username || !user?.profileImageUrl) {
+  if (!user) {
     return (
       <div>
         <div className=" flex h-14 items-center justify-end space-x-2 pb-2 lg:justify-start lg:pl-8">
@@ -30,7 +30,7 @@ const Profile = () => {
             </SignOutButton>
           </div>
           <div className="hidden h-full pr-2 lg:flex lg:flex-col lg:items-center lg:justify-center">
-            <button className="text-lg">SignOut</button>
+            <button className="text-lg">Sign Out</button>
           </div>
         </div>
       </div>
@@ -63,7 +63,7 @@ const Profile = () => {
           </SignOutButton>
         </div>
         <div className="hidden h-full pr-2 lg:flex lg:flex-col lg:items-center lg:justify-center">
-          <div className="text-lg">SignOut</div>
+          <div className="text-lg">Sign Out</div>
         </div>
       </div>
     </div>
