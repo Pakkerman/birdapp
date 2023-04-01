@@ -11,7 +11,6 @@ import { LoadingSpinner } from "~/components/loading"
 
 import { AiOutlineArrowLeft } from "react-icons/ai"
 import usePosts from "~/hooks/usePosts"
-import { useRef } from "react"
 import Link from "next/link"
 
 const ProfileFeed = (props: { userId: string }) => {
