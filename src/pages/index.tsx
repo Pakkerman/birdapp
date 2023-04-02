@@ -101,7 +101,7 @@ const CreatPostWizard = () => {
         </div>
         {showEmojiKeyboard && (
           <div className="preview relative">
-            <div className="preview absolute top-[-40px] left-[-30px] z-20 scale-75 overflow-hidden rounded-xl border-2 border-violet-900">
+            <div className="preview absolute top-[-40px] left-[-50px] z-20 scale-75 overflow-hidden rounded-xl border-2 border-violet-900">
               <EmojiPicker
                 height={400}
                 width={350}
