@@ -1,15 +1,35 @@
 import Link from "next/link"
 import Image from "next/image"
 
-import { api, RouterOutputs } from "~/utils/api"
+import type { RouterOutputs } from "~/utils/api"
+import { api } from "~/utils/api"
 
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
+import updateLocale from "dayjs/plugin/updateLocale"
 import { AiOutlineClose } from "react-icons/ai"
 import toast from "react-hot-toast"
 import { useUser } from "@clerk/nextjs"
 
 dayjs.extend(relativeTime)
+dayjs.extend(updateLocale)
+
+dayjs.updateLocale("en", {
+  relativeTime: {
+    past: "%s",
+    s: "just now",
+    m: "1m",
+    mm: "%dm",
+    h: "1h",
+    hh: "%dh",
+    d: "1d",
+    dd: "%dd",
+    M: "1M",
+    MM: "%dM",
+    y: "1Y",
+    yy: "%dY",
+  },
+})
 
 // timecode 49:15
 type PostWithUser = RouterOutputs["posts"]["getAll"][number]
@@ -65,7 +85,7 @@ const PostView = (props: PostWithUser) => {
         <div className="mb-1 flex items-center justify-between gap-1 text-slate-300">
           <div>
             <Link href={`/@${author.username}`}>
-              <span>{`${author.username}`}</span>{" "}
+              <span>{`${author.authorName ?? author.username}`}</span>{" "}
               <span className="text-slate-500">{`@${author.username}`}</span>
             </Link>
             <Link href={`/post/${post.id}`}>

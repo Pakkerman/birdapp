@@ -113,7 +113,7 @@ const Home: NextPage = () => {
   const { isLoaded: userLoaded, isSignedIn, user } = useUser()
   // start fetch asap, and the result will be cache by react query
   api.posts.getAll.useQuery()
-  // api.profile.generateUsername.useQuery()
+  api.profile.generateUsername.useQuery()
 
   // Return empty div if user isn't loaded
   if (!userLoaded) return <div />

@@ -68,7 +68,7 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
   return (
     <>
       <Head>
-        <title>{data.username}</title>
+        <title>{data.authorName}</title>
       </Head>
       <div className="flex w-screen justify-center">
         <PageLayout>
@@ -86,7 +86,7 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
 
           <div className="p-4">
             <div className="text-2xl font-bold ">{`${
-              data.username ?? ""
+              data.authorName ?? ""
             }`}</div>
             <div className="text-1xl font-bold text-slate-500">{`@${
               data.username ?? ""
