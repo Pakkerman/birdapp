@@ -10,7 +10,8 @@ import { PageLayout } from "~/components/layout"
 import { LoadingPage, LoadingSpinner } from "~/components/loading"
 import PostView from "~/components/PostView"
 import toast from "react-hot-toast"
-import EmojiPicker from "emoji-picker-react"
+import EmojiPicker, { Theme, EmojiStyle } from "emoji-picker-react"
+
 import { MdOutlineEmojiEmotions } from "react-icons/md"
 
 import { useAutoAnimate } from "@formkit/auto-animate/react"
@@ -106,9 +107,9 @@ const CreatPostWizard = () => {
                 width={350}
                 searchDisabled
                 skinTonesDisabled
-                theme="dark"
-                emojiStyle="twitter"
-                onEmojiClick={(emoji) => setInput(input + emoji.emoji)}
+                theme={Theme.DARK}
+                emojiStyle={EmojiStyle.TWITTER}
+                onEmojiClick={({ emoji }) => setInput(input + emoji)}
               />
             </div>
           </div>
