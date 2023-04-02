@@ -73,7 +73,7 @@ const Profile = () => {
 
 const SidePanel = () => {
   return (
-    <div className="flex h-screen flex-col px-1">
+    <div className="flex h-[100svh] flex-col px-1">
       <div className="flex h-full flex-col items-end justify-start space-y-6 py-6 lg:items-start lg:pl-8">
         <Link href="/">
           <div className="flex items-center space-x-2">

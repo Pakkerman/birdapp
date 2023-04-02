@@ -4,7 +4,7 @@ import SidePanel from "./SidePanel"
 
 export const PageLayout = (props: PropsWithChildren) => {
   return (
-    <main className="flex h-[100vh] w-full max-w-7xl justify-center">
+    <main className="flex h-[100svh] w-full max-w-7xl justify-center">
       <div className="max-w-[200px] flex-[1_1_50px] sm:block">
         <SidePanel />
       </div>

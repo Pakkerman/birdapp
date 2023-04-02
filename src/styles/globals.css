@@ -7,7 +7,7 @@
 body {
   @apply w-screen bg-stone-900 text-slate-100;
   font-family: "raleway";
-  height: -webkit-fill-available;
+
   /* overscroll-behavior: none; */
   /* scrollbar-color: black; */
 }
