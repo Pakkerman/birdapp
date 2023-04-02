@@ -11,6 +11,8 @@ import { LoadingPage, LoadingSpinner } from "~/components/loading"
 import PostView from "~/components/PostView"
 import toast from "react-hot-toast"
 
+import { useAutoAnimate } from "@formkit/auto-animate/react"
+
 const CreatPostWizard = () => {
   const { user } = useUser()
 
@@ -82,13 +84,14 @@ const CreatPostWizard = () => {
 
 const Feed = () => {
   const { data, isLoading: postsLoading } = api.posts.getAll.useQuery()
+  const [animationParent] = useAutoAnimate()
 
   if (postsLoading) return <LoadingPage />
 
   if (!data) return <div>somehting went wrong</div>
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col" ref={animationParent}>
       {data.map((fullpost) => (
         <PostView {...fullpost} key={fullpost.post.id} />
       ))}
