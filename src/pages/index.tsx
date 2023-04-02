@@ -10,6 +10,7 @@ import { PageLayout } from "~/components/layout"
 import { LoadingPage, LoadingSpinner } from "~/components/loading"
 import PostView from "~/components/PostView"
 import toast from "react-hot-toast"
+import { clerkClient } from "@clerk/nextjs/server"
 
 const CreatPostWizard = () => {
   const { user } = useUser()
@@ -94,13 +95,14 @@ const Feed = () => {
 }
 
 const Home: NextPage = () => {
-  const { isLoaded: userLoaded, isSignedIn } = useUser()
+  const { isLoaded: userLoaded, isSignedIn, user } = useUser()
   // start fetch asap, and the result will be cache by react query
   api.posts.getAll.useQuery()
-  api.profile.generateMetadata.useQuery()
+  api.profile.generateUsername.useQuery()
 
   // Return empty div if user isn't loaded
   if (!userLoaded) return <div />
+  console.log(user)
 
   return (
     <>

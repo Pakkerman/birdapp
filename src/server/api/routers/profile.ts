@@ -17,6 +17,7 @@ export const profileRouter = createTRPCRouter({
       const [user] = await clerkClient.users.getUserList({
         username: [input.username],
       })
+
       if (!user)
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
@@ -26,29 +27,16 @@ export const profileRouter = createTRPCRouter({
       return filterUserForClient(user)
     }),
 
-  generateMetadata: publicProcedure.query(async () => {
+  generateUsername: publicProcedure.query(async () => {
     const users = await clerkClient.users.getUserList()
 
     users.map(async (user) => {
-      if (!user.publicMetadata.handle) {
-        return await clerkClient.users.updateUser(user.id, {
-          publicMetadata: {
-            handle: `@${
-              user.emailAddresses[0]?.emailAddress.split("@")[0] ?? "nohandle"
-            }`,
-            username:
-              user.username ?? (user.firstName ?? "") + (user.lastName ?? ""),
-          },
+      if (user.username === null) {
+        console.log("updataing =>", user.emailAddresses)
+        return clerkClient.users.updateUser(user.id, {
+          username: user.emailAddresses[0]?.emailAddress.split("@")[0],
         })
       }
     })
   }),
-  // not quite working, successfully call this from the client, but no idea how to update user
-  // generateUsername: privateProcedure
-  //   .input(z.object({ userId: z.string() }))
-  //   .query(async ({ input }) => {
-  //     console.log("input of createNewUser :>> ", input)
-  //     const params = { username: "123" }
-  //     await clerkClient.users.updateUser(input.userId, params)
-  //   }),
 })
