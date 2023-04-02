@@ -10,13 +10,17 @@ import { PageLayout } from "~/components/layout"
 import { LoadingPage, LoadingSpinner } from "~/components/loading"
 import PostView from "~/components/PostView"
 import toast from "react-hot-toast"
+import EmojiPicker from "emoji-picker-react"
+import { MdOutlineEmojiEmotions } from "react-icons/md"
 
 import { useAutoAnimate } from "@formkit/auto-animate/react"
+import autoAnimate from "@formkit/auto-animate"
 
 const CreatPostWizard = () => {
   const { user } = useUser()
 
   const [input, setInput] = useState<string>("")
+  const [showEmojiKeyboard, setShowEmojiKeyboard] = useState<boolean>(false)
 
   const ctx = api.useContext()
 
@@ -40,43 +44,75 @@ const CreatPostWizard = () => {
   if (!user) return null
 
   return (
-    <div>
-      <div className="flex w-full gap-3">
-        <Image
-          className="h-14 w-14 rounded-full"
-          src={user.profileImageUrl}
-          alt="profile picture"
-          width={56}
-          height={56}
-        />
+    <div className="flex space-x-4">
+      <Image
+        className="h-14 w-14 rounded-full"
+        src={user.profileImageUrl}
+        alt="profile picture"
+        width={56}
+        height={56}
+      />
+      <div className="flex w-full flex-col">
         <input
           placeholder="Say something in emoji!"
-          className="grow bg-transparent text-xl outline-none"
+          className=" h-[56px] bg-transparent text-xl outline-none"
           type="text"
           value={input}
           onChange={(event) => setInput(event.target.value.replaceAll(" ", ""))}
           disabled={isPosting}
           onKeyDown={(event) => {
+            setShowEmojiKeyboard(false)
             if (event.key !== "Enter") return
             if (input === "") return
             event.preventDefault()
             mutate({ content: input })
           }}
         />
-      </div>
-      <div className="flex justify-end">
-        <button
-          className="w-18 flex flex-[0_0_75px] items-center justify-center rounded-md bg-violet-600 p-2 text-slate-50 disabled:bg-violet-800 disabled:text-slate-400"
-          disabled={isPosting || input === ""}
-          onClick={() => mutate({ content: input })}>
-          {isPosting ? (
-            <div className="text-slate-50">
-              <LoadingSpinner size={24} />
+        <div className="my-4 border-[0.5px] border-b border-slate-800" />
+        <div className="relative mx-2 flex justify-between">
+          <button
+            onClick={() => {
+              setShowEmojiKeyboard(!showEmojiKeyboard)
+            }}>
+            <div
+              className={`rounded-full text-violet-400 transition-colors hover:bg-violet-800 hover:text-violet-400 ${
+                showEmojiKeyboard ? "bg-violet-700" : "bg-none"
+              }`}>
+              <MdOutlineEmojiEmotions size={30} />
             </div>
-          ) : (
-            "Emote"
-          )}
-        </button>
+          </button>
+
+          <button
+            className="w-18 flex flex-[0_0_75px] items-center justify-center rounded-md bg-violet-600 p-2 text-slate-50 transition-colors disabled:bg-violet-800 disabled:text-slate-400"
+            disabled={isPosting || input === ""}
+            onClick={() => {
+              setShowEmojiKeyboard(false)
+              mutate({ content: input })
+            }}>
+            {isPosting ? (
+              <div className="text-slate-50">
+                <LoadingSpinner size={24} />
+              </div>
+            ) : (
+              "Emote"
+            )}
+          </button>
+        </div>
+        {showEmojiKeyboard && (
+          <div className="preview relative">
+            <div className="preview absolute top-[-40px] left-[-30px] z-20 scale-75 overflow-hidden rounded-xl border-2 border-violet-900">
+              <EmojiPicker
+                height={400}
+                width={350}
+                searchDisabled
+                skinTonesDisabled
+                theme="dark"
+                emojiStyle="twitter"
+                onEmojiClick={(emoji) => setInput(input + emoji.emoji)}
+              />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )

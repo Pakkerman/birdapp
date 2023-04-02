@@ -10,6 +10,7 @@ import updateLocale from "dayjs/plugin/updateLocale"
 import { AiOutlineClose } from "react-icons/ai"
 import toast from "react-hot-toast"
 import { useUser } from "@clerk/nextjs"
+import { LoadingSpinner } from "./loading"
 
 dayjs.extend(relativeTime)
 dayjs.extend(updateLocale)
@@ -44,7 +45,7 @@ const DeletePostWizard = (props: { postId: string; authorId: string }) => {
 
   if (!user || user.id != props.authorId) return <div></div>
 
-  const { mutate } = api.posts.deletePostById.useMutation({
+  const { mutate, isLoading } = api.posts.deletePostById.useMutation({
     onSuccess: () => {
       toast.success("Post deleted!")
       void ctx.posts.getAll.invalidate()
@@ -61,8 +62,10 @@ const DeletePostWizard = (props: { postId: string; authorId: string }) => {
   })
 
   return (
-    <div onClick={() => mutate({ postId: props.postId })}>
-      <AiOutlineClose />
+    <div
+      className="cursor-pointer text-slate-600 transition-colors duration-200 hover:text-red-400 active:text-slate-600 "
+      onClick={() => mutate({ postId: props.postId })}>
+      {isLoading ? <LoadingSpinner size={24} /> : <AiOutlineClose size={24} />}
     </div>
   )
 }
