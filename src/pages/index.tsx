@@ -39,41 +39,38 @@ const CreatPostWizard = () => {
   if (!user) return null
 
   return (
-    <div className="flex w-full gap-3">
-      <Image
-        className="h-14 w-14 rounded-full"
-        src={user.profileImageUrl}
-        alt="profile picture"
-        width={56}
-        height={56}
-      />
-      <input
-        placeholder="Say something in emoji!"
-        className="grow bg-transparent outline-none"
-        type="text"
-        value={input}
-        onChange={(event) => setInput(event.target.value.replaceAll(" ", ""))}
-        disabled={isPosting}
-        onKeyDown={(event) => {
-          if (event.key !== "Enter") return
-          if (input === "") return
-          event.preventDefault()
-          mutate({ content: input })
-        }}
-      />
-
-      {input !== "" && !isPosting && (
+    <div>
+      <div className="flex w-full gap-3">
+        <Image
+          className="h-14 w-14 rounded-full"
+          src={user.profileImageUrl}
+          alt="profile picture"
+          width={56}
+          height={56}
+        />
+        <input
+          placeholder="Say something in emoji!"
+          className="grow bg-transparent outline-none"
+          type="text"
+          value={input}
+          onChange={(event) => setInput(event.target.value.replaceAll(" ", ""))}
+          disabled={isPosting}
+          onKeyDown={(event) => {
+            if (event.key !== "Enter") return
+            if (input === "") return
+            event.preventDefault()
+            mutate({ content: input })
+          }}
+        />
+      </div>
+      <div className="flex justify-end">
         <button
-          className="self-center rounded-md border-2 border-slate-400 p-2"
+          className="w-18 flex flex-[0_0_75px] items-center justify-center rounded-md bg-violet-600 p-2 text-slate-50 disabled:bg-violet-800 disabled:text-slate-400"
+          disabled={isPosting || input === ""}
           onClick={() => mutate({ content: input })}>
-          Post
+          {isPosting ? <LoadingSpinner size={24} /> : "Emote"}
         </button>
-      )}
-      {isPosting && (
-        <div className="flex items-center justify-center">
-          <LoadingSpinner size={30} />
-        </div>
-      )}
+      </div>
     </div>
   )
 }
@@ -98,7 +95,7 @@ const Home: NextPage = () => {
   const { isLoaded: userLoaded, isSignedIn, user } = useUser()
   // start fetch asap, and the result will be cache by react query
   api.posts.getAll.useQuery()
-  api.profile.generateUsername.useQuery()
+  // api.profile.generateUsername.useQuery()
 
   // Return empty div if user isn't loaded
   if (!userLoaded) return <div />
