@@ -49,7 +49,7 @@ const CreatPostWizard = () => {
         />
         <input
           placeholder="Say something in emoji!"
-          className="grow bg-transparent outline-none"
+          className="grow bg-transparent text-xl outline-none"
           type="text"
           value={input}
           onChange={(event) => setInput(event.target.value.replaceAll(" ", ""))}
@@ -67,7 +67,13 @@ const CreatPostWizard = () => {
           className="w-18 flex flex-[0_0_75px] items-center justify-center rounded-md bg-violet-600 p-2 text-slate-50 disabled:bg-violet-800 disabled:text-slate-400"
           disabled={isPosting || input === ""}
           onClick={() => mutate({ content: input })}>
-          {isPosting ? <LoadingSpinner size={24} /> : "Emote"}
+          {isPosting ? (
+            <div className="text-slate-50">
+              <LoadingSpinner size={24} />
+            </div>
+          ) : (
+            "Emote"
+          )}
         </button>
       </div>
     </div>

@@ -1,10 +1,10 @@
-import { useUser, SignOutButton, UserButton } from "@clerk/nextjs"
+import { useUser, SignOutButton, SignInButton, UserButton } from "@clerk/nextjs"
 
 import Link from "next/link"
 import Image from "next/image"
 import { FaHashtag, FaInfo } from "react-icons/fa"
 import { GiChicken } from "react-icons/gi"
-import { BiLogOutCircle } from "react-icons/bi"
+import { BiLogOutCircle, BiLogInCircle } from "react-icons/bi"
 import { LoadingSpinner } from "./loading"
 
 const Profile = () => {
@@ -24,13 +24,13 @@ const Profile = () => {
     return (
       <div>
         <div className=" flex h-14 items-center justify-end space-x-2 pb-2 lg:justify-start lg:pl-8">
-          <div className=" flex w-16 justify-center lg:w-10">
-            <SignOutButton>
-              <BiLogOutCircle size={36} />
-            </SignOutButton>
+          <div className=" flex w-16 cursor-pointer justify-center lg:w-10">
+            <SignInButton>
+              <BiLogInCircle size={36} />
+            </SignInButton>
           </div>
           <div className="hidden h-full pr-2 lg:flex lg:flex-col lg:items-center lg:justify-center">
-            <button className="text-lg">Sign Out</button>
+            <button className="text-lg">Sign In</button>
           </div>
         </div>
       </div>

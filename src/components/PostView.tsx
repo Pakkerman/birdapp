@@ -62,7 +62,7 @@ const PostView = (props: PostWithUser) => {
         height={56}
       />
       <div className="flex w-full flex-col">
-        <div className="view flex items-center justify-between gap-1 text-slate-300">
+        <div className="mb-1 flex items-center justify-between gap-1 text-slate-300">
           <div>
             <Link href={`/@${author.username}`}>
               <span>{`${author.username}`}</span>{" "}
