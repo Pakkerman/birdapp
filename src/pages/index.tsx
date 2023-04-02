@@ -10,7 +10,6 @@ import { PageLayout } from "~/components/layout"
 import { LoadingPage, LoadingSpinner } from "~/components/loading"
 import PostView from "~/components/PostView"
 import toast from "react-hot-toast"
-import { clerkClient } from "@clerk/nextjs/server"
 
 const CreatPostWizard = () => {
   const { user } = useUser()
@@ -91,6 +90,16 @@ const Feed = () => {
   )
 }
 
+const Navbar = () => {
+  return (
+    <div className="flex h-20 items-center border-b border-slate-600 p-3">
+      <div>
+        <div className="pl-4 text-2xl font-semibold">Home</div>
+      </div>
+    </div>
+  )
+}
+
 const Home: NextPage = () => {
   const { isLoaded: userLoaded, isSignedIn, user } = useUser()
   // start fetch asap, and the result will be cache by react query
@@ -105,6 +114,7 @@ const Home: NextPage = () => {
     <>
       <div className="flex w-screen justify-center">
         <PageLayout>
+          <Navbar />
           <div className="border-b border-slate-600 p-4">
             {!isSignedIn && (
               <div className="flex justify-center">
