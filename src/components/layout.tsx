@@ -8,7 +8,7 @@ export const PageLayout = (props: PropsWithChildren) => {
       <div className="max-w-[200px] flex-[1_1_50px] sm:block">
         <SidePanel />
       </div>
-      <div className="h-full max-w-2xl flex-[5_1_500px] overflow-y-auto border-x-[1px] border-slate-600">
+      <div className="h-full  max-w-2xl flex-[5_1_500px] overflow-y-auto border-x-[1px] border-slate-600">
         {props.children}
       </div>
       <div className="hidden max-w-[200px] flex-[1_1] sm:block"></div>

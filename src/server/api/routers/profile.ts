@@ -27,16 +27,13 @@ export const profileRouter = createTRPCRouter({
       return filterUserForClient(user)
     }),
 
-  generateUsername: publicProcedure.query(async () => {
-    const users = await clerkClient.users.getUserList()
+  generateUsername: publicProcedure
+    .input(z.object({ userId: z.string() }))
+    .mutation(async ({ input }) => {
+      const user = await clerkClient.users.getUser(input.userId)
 
-    users.map(async (user) => {
-      if (user.username === null) {
-        console.log("updataing =>", user.emailAddresses)
-        return clerkClient.users.updateUser(user.id, {
-          username: user.emailAddresses[0]?.emailAddress.split("@")[0],
-        })
-      }
-    })
-  }),
+      return clerkClient.users.updateUser(input.userId, {
+        username: user.emailAddresses[0]?.emailAddress.split("@")[0],
+      })
+    }),
 })

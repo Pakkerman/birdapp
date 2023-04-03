@@ -12,13 +12,15 @@ generator client {
 }
 
 model Post {
-    id        String   @id @default(cuid())
-    likeCount Int
-    viewCount Int
-    createdAt DateTime @default(now())
+    id         String @id @default(cuid())
+    likeCount  Int?   @default(0)
+    viewCount  Int?   @default(0)
+    likedUsers Json?
 
     content  String @db.VarChar(255)
     authorId String
+
+    createdAt DateTime @default(now())
 
     @@index([authorId])
 }

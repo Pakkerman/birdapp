@@ -13,6 +13,8 @@ import { useUser } from "@clerk/nextjs"
 import { AiOutlineClose, AiOutlineHeart, AiFillHeart } from "react-icons/ai"
 import { IoIosStats } from "react-icons/io"
 import { LoadingSpinner } from "./loading"
+import type { Prisma } from "@prisma/client"
+import { useState } from "react"
 
 dayjs.extend(relativeTime)
 dayjs.extend(updateLocale)
@@ -72,16 +74,44 @@ const DeletePostWizard = (props: { postId: string; authorId: string }) => {
   )
 }
 
-const PostActions = () => {
+const PostActions = (props: {
+  username: string
+  postId: string
+  likeCount: number
+  viewCount: number
+  liked: boolean
+}) => {
+  const { likeCount, viewCount, postId, username } = props
+  const ctx = api.useContext()
+  const { mutate } = api.posts.likePost.useMutation({
+    onSuccess: () => {
+      toast.success("Liked emote!")
+      void ctx.posts.getAll.invalidate()
+    },
+
+    onError: (error) => {
+      const errorMessage = error.data?.zodError?.fieldErrors.content
+      console.log("errorMessage", errorMessage)
+      if (errorMessage && errorMessage[0]) {
+        toast.error(errorMessage[0])
+      } else {
+        toast.error("Failed to like! Please try again later!")
+      }
+      toast.error("Failed to like! Please try again later!")
+    },
+  })
+
   return (
     <div className=" mt-2 flex space-x-8 text-slate-400">
       <div className="flex cursor-pointer items-center space-x-1">
-        <AiOutlineHeart size={24} />
-        <div>23</div>
+        <button onClick={() => mutate({ postId, username })}>
+          <AiOutlineHeart size={24} />
+        </button>
+        <div>{likeCount}</div>
       </div>
       <div className="flex cursor-pointer space-x-1">
         <IoIosStats size={24} />
-        <div>55</div>
+        <div>{viewCount}</div>
       </div>
     </div>
   )
@@ -89,11 +119,14 @@ const PostActions = () => {
 
 const PostView = (props: PostWithUser) => {
   const { post, author } = props
+  // const [liked, setLiked] = useState(false)
+  // const { user, isSignedIn } = useUser()
+
+  // if (post.likedUsers && post.likedUsers?.includes(user.username))
+  // if (isSignedIn && post?.likedUsers?.includes(user.username))
 
   return (
-    <div
-      className=" flex space-x-4 border-b border-slate-600 p-4"
-      key={post.id}>
+    <div className="flex space-x-4 border-b border-slate-600 p-4" key={post.id}>
       <Image
         src={author.profileImageUrl}
         alt={`@${author.username}'s profile picture`}
@@ -105,21 +138,29 @@ const PostView = (props: PostWithUser) => {
         <div className="mb-1 flex items-center justify-between gap-1 text-slate-300">
           <div>
             <Link href={`/@${author.username}`}>
-              <span>{`${author.authorName ?? author.username}`}</span>{" "}
+              <span className="">{`${
+                author.authorName ?? author.username
+              }`}</span>{" "}
               <span className="text-slate-500">{`@${author.username}`}</span>
             </Link>
-            <Link href={`/post/${post.id}`}>
-              <span className="font-thin text-slate-500">{` · ${dayjs(
-                post.createdAt
-              ).fromNow()}`}</span>
-            </Link>
+            <span className="font-thin text-slate-500">{` · ${dayjs(
+              post.createdAt
+            ).fromNow()}`}</span>
           </div>
           <div>
             <DeletePostWizard postId={post.id} authorId={author.id} />
           </div>
         </div>
-        <span className="text-2xl">{post.content}</span>
-        <PostActions />
+        <Link href={`/post/${post.id}`}>
+          <span className="text-xl">{post.content}</span>
+        </Link>
+        <PostActions
+          username={author.username}
+          postId={post.id}
+          liked={false}
+          likeCount={post.likeCount ?? 0}
+          viewCount={post.viewCount ?? 0}
+        />
       </div>
     </div>
   )

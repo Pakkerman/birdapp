@@ -12,7 +12,7 @@ import {
 import { Ratelimit } from "@upstash/ratelimit"
 import { Redis } from "@upstash/redis"
 import { filterUserForClient } from "~/server/helpers/filterUserForClients"
-import type { Post } from "@prisma/client"
+import type { Post, Prisma } from "@prisma/client"
 import { prisma } from "~/server/db"
 
 // Create a new ratelimiter, that allows 10 requests per 10 secs
@@ -94,6 +94,7 @@ export const postsRouter = createTRPCRouter({
         data: {
           authorId,
           content: input.content,
+          likedUsers: [],
         },
       })
 
@@ -108,5 +109,42 @@ export const postsRouter = createTRPCRouter({
       const deletePost = await ctx.prisma.post.delete({ where: { id: postId } })
 
       return deletePost
+    }),
+
+  likePost: privateProcedure
+    .input(z.object({ postId: z.string(), username: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const json = await ctx.prisma.post.findUnique({
+        where: { id: input.postId },
+        select: { likedUsers: true },
+      })
+
+      let updateUserArray: Prisma.JsonArray = []
+
+      if (
+        json?.likedUsers &&
+        typeof json?.likedUsers === "object" &&
+        Array.isArray(json?.likedUsers)
+      ) {
+        updateUserArray = (
+          json?.likedUsers.includes(input.username)
+            ? json.likedUsers.filter((name) => name != input.username)
+            : [...json?.likedUsers, input.username]
+        ) as Prisma.JsonArray
+      }
+
+      const updatedPost = await prisma.post.update({
+        where: { id: input.postId },
+        data: {
+          likedUsers: updateUserArray,
+        },
+      })
+
+      const post = await ctx.prisma.post.update({
+        where: { id: input.postId },
+        data: { likeCount: updateUserArray.length },
+      })
+
+      return post
     }),
 })

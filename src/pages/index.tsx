@@ -138,8 +138,8 @@ const Feed = () => {
 
 const Navbar = () => {
   return (
-    <div className="h-20">
-      <div className="fixed z-40 flex h-20 w-full items-center border-b border-slate-600 bg-stone-900 bg-opacity-60 p-3 backdrop-blur-sm">
+    <div className="h-20 ">
+      <div className=" fixed z-20 flex h-[inherit]  items-center border-b border-slate-600 bg-stone-900 bg-opacity-60 p-3 backdrop-blur-sm">
         <div>
           <div className="pl-4 text-2xl font-semibold">Home</div>
         </div>
@@ -152,11 +152,22 @@ const Home: NextPage = () => {
   const { isLoaded: userLoaded, isSignedIn, user } = useUser()
   // start fetch asap, and the result will be cache by react query
   api.posts.getAll.useQuery()
-  api.profile.generateUsername.useQuery()
+  //  TOFIX: query cannot be empty
+  const { mutate, isLoading } = api.profile.generateUsername.useMutation({
+    onSuccess: () => {
+      console.log("username updated")
+    },
+    onError: () => {
+      console.log("fail to update username")
+    },
+  })
 
   // Return empty div if user isn't loaded
   if (!userLoaded) return <div />
-  console.log(user)
+
+  if (user?.username === null) {
+    if (!isLoading) mutate({ userId: user.id })
+  }
 
   return (
     <>
