@@ -7,9 +7,11 @@ import { api } from "~/utils/api"
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
 import updateLocale from "dayjs/plugin/updateLocale"
-import { AiOutlineClose } from "react-icons/ai"
 import toast from "react-hot-toast"
 import { useUser } from "@clerk/nextjs"
+
+import { AiOutlineClose, AiOutlineHeart, AiFillHeart } from "react-icons/ai"
+import { IoIosStats } from "react-icons/io"
 import { LoadingSpinner } from "./loading"
 
 dayjs.extend(relativeTime)
@@ -70,12 +72,27 @@ const DeletePostWizard = (props: { postId: string; authorId: string }) => {
   )
 }
 
+const PostActions = () => {
+  return (
+    <div className=" mt-2 flex space-x-8 text-slate-400">
+      <div className="flex cursor-pointer items-center space-x-1">
+        <AiOutlineHeart size={24} />
+        <div>23</div>
+      </div>
+      <div className="flex cursor-pointer space-x-1">
+        <IoIosStats size={24} />
+        <div>55</div>
+      </div>
+    </div>
+  )
+}
+
 const PostView = (props: PostWithUser) => {
   const { post, author } = props
 
   return (
     <div
-      className=" flex space-x-3 border-b border-slate-600 p-4"
+      className=" flex space-x-4 border-b border-slate-600 p-4"
       key={post.id}>
       <Image
         src={author.profileImageUrl}
@@ -102,6 +119,7 @@ const PostView = (props: PostWithUser) => {
           </div>
         </div>
         <span className="text-2xl">{post.content}</span>
+        <PostActions />
       </div>
     </div>
   )

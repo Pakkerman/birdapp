@@ -22,16 +22,16 @@ const Profile = () => {
   if (!user || !user.username) {
     return (
       <div>
-        <div className=" flex h-14 items-center justify-end space-x-2 pb-2 lg:justify-start lg:pl-8">
-          <div className=" flex w-16 cursor-pointer justify-center lg:w-10">
-            <SignInButton>
+        <SignInButton>
+          <div className=" flex h-14 cursor-pointer items-center justify-end space-x-2 pb-2 hover:text-violet-400 lg:justify-start lg:pl-8 ">
+            <div className=" flex w-16 cursor-pointer justify-center lg:w-10">
               <BiLogInCircle size={36} />
-            </SignInButton>
+            </div>
+            <div className="hidden h-full pr-2 lg:flex lg:flex-col lg:items-center lg:justify-center ">
+              <button className="text-lg">Sign In</button>
+            </div>
           </div>
-          <div className="hidden h-full pr-2 lg:flex lg:flex-col lg:items-center lg:justify-center">
-            <button className="text-lg">Sign In</button>
-          </div>
-        </div>
+        </SignInButton>
       </div>
     )
   }
@@ -52,16 +52,16 @@ const Profile = () => {
           </div>
         </div>
       </Link>
-      <div className="flex h-14 items-center justify-end space-x-2 pb-2 lg:justify-start lg:pl-8">
-        <div className="flex w-16 cursor-pointer justify-center lg:w-10">
-          <SignOutButton>
+      <SignOutButton>
+        <div className="flex h-14 cursor-pointer items-center justify-end space-x-2 pb-2 hover:text-violet-400 lg:justify-start lg:pl-8">
+          <div className="flex w-16 cursor-pointer justify-center lg:w-10">
             <BiLogOutCircle size={36} />
-          </SignOutButton>
+          </div>
+          <div className="hidden h-full pr-2 lg:flex lg:flex-col lg:items-center lg:justify-center ">
+            <div className="text-lg">Sign Out</div>
+          </div>
         </div>
-        <div className="hidden h-full pr-2 lg:flex lg:flex-col lg:items-center lg:justify-center">
-          <div className="text-lg">Sign Out</div>
-        </div>
-      </div>
+      </SignOutButton>
     </div>
   )
 }
@@ -72,21 +72,21 @@ const SidePanel = () => {
       <div className="flex h-full flex-col items-end justify-start space-y-6 py-6 lg:items-start lg:pl-8">
         <Link href="/">
           <div className="flex items-center space-x-2">
-            <div className="flex w-16 justify-center lg:w-10">
+            <div className="flex w-16 justify-center text-violet-400 lg:w-10">
               <GiChicken size={36} />
             </div>
             <h1 className="hidden text-xl lg:block">Bird App</h1>
           </div>
         </Link>
 
-        <div className="flex items-center space-x-2">
+        <div className="flex cursor-pointer items-center space-x-2 hover:text-violet-400">
           <div className="flex w-16 justify-center lg:w-10">
             <FaHashtag size={28} />
           </div>
           <h1 className="hidden text-xl lg:block">Emoji Only</h1>
         </div>
 
-        <div className="flex items-center space-x-2">
+        <div className="flex cursor-pointer items-center space-x-2 hover:text-violet-400">
           <div className="flex w-16 justify-center lg:w-10">
             <FaInfo size={28} />
           </div>

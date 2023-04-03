@@ -104,7 +104,7 @@ const CreatPostWizard = () => {
             <div className="preview absolute top-[-40px] left-[-50px] z-20 scale-75 overflow-hidden rounded-xl border-2 border-violet-900">
               <EmojiPicker
                 height={400}
-                width={350}
+                width={300}
                 searchDisabled
                 skinTonesDisabled
                 theme={Theme.DARK}
@@ -138,9 +138,11 @@ const Feed = () => {
 
 const Navbar = () => {
   return (
-    <div className="flex h-20 items-center border-b border-slate-600 p-3">
-      <div>
-        <div className="pl-4 text-2xl font-semibold">Home</div>
+    <div className="h-20">
+      <div className="fixed z-40 flex h-20 w-full items-center border-b border-slate-600 bg-stone-900 bg-opacity-60 p-3 backdrop-blur-sm">
+        <div>
+          <div className="pl-4 text-2xl font-semibold">Home</div>
+        </div>
       </div>
     </div>
   )
