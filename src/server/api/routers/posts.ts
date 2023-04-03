@@ -112,7 +112,7 @@ export const postsRouter = createTRPCRouter({
     }),
 
   likePost: privateProcedure
-    .input(z.object({ postId: z.string(), username: z.string() }))
+    .input(z.object({ postId: z.string(), currentUser: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const json = await ctx.prisma.post.findUnique({
         where: { id: input.postId },
@@ -127,9 +127,9 @@ export const postsRouter = createTRPCRouter({
         Array.isArray(json?.likedUsers)
       ) {
         updateUserArray = (
-          json?.likedUsers.includes(input.username)
-            ? json.likedUsers.filter((name) => name != input.username)
-            : [...json?.likedUsers, input.username]
+          json?.likedUsers.includes(input.currentUser)
+            ? json.likedUsers.filter((name) => name != input.currentUser)
+            : [...json?.likedUsers, input.currentUser]
         ) as Prisma.JsonArray
       }
 

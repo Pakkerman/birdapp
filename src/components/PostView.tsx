@@ -75,13 +75,13 @@ const DeletePostWizard = (props: { postId: string; authorId: string }) => {
 }
 
 const PostActions = (props: {
-  username: string
+  currentUser: string | null
   postId: string
   likeCount: number
   viewCount: number
   liked: boolean
 }) => {
-  const { likeCount, viewCount, postId, username } = props
+  const { likeCount, viewCount, postId, currentUser } = props
   const ctx = api.useContext()
   const { mutate } = api.posts.likePost.useMutation({
     onSuccess: () => {
@@ -104,7 +104,11 @@ const PostActions = (props: {
   return (
     <div className=" mt-2 flex space-x-8 text-slate-400">
       <div className="flex cursor-pointer items-center space-x-1">
-        <button onClick={() => mutate({ postId, username })}>
+        <button
+          onClick={() => {
+            if (!currentUser) return
+            mutate({ postId, currentUser })
+          }}>
           <AiOutlineHeart size={24} />
         </button>
         <div>{likeCount}</div>
@@ -120,7 +124,7 @@ const PostActions = (props: {
 const PostView = (props: PostWithUser) => {
   const { post, author } = props
   // const [liked, setLiked] = useState(false)
-  // const { user, isSignedIn } = useUser()
+  const { user, isSignedIn } = useUser()
 
   // if (post.likedUsers && post.likedUsers?.includes(user.username))
   // if (isSignedIn && post?.likedUsers?.includes(user.username))
@@ -155,7 +159,7 @@ const PostView = (props: PostWithUser) => {
           <span className="text-xl">{post.content}</span>
         </Link>
         <PostActions
-          username={author.username}
+          currentUser={user?.username ?? null}
           postId={post.id}
           liked={false}
           likeCount={post.likeCount ?? 0}
