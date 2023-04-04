@@ -144,7 +144,17 @@ export const postsRouter = createTRPCRouter({
         where: { id: input.postId },
         data: { likeCount: updateUserArray.length },
       })
-
       return post
+    }),
+
+  incrementViewCount: publicProcedure
+    .input(z.object({ postId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.post.update({
+        where: { id: input.postId },
+        data: {
+          viewCount: { increment: 1 },
+        },
+      })
     }),
 })

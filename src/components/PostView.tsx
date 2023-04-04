@@ -4,36 +4,15 @@ import Image from "next/image"
 import type { RouterOutputs } from "~/utils/api"
 import { api } from "~/utils/api"
 
-import dayjs from "dayjs"
-import relativeTime from "dayjs/plugin/relativeTime"
-import updateLocale from "dayjs/plugin/updateLocale"
 import toast from "react-hot-toast"
 import { useUser } from "@clerk/nextjs"
 
 import { AiOutlineClose, AiOutlineHeart, AiFillHeart } from "react-icons/ai"
 import { IoIosStats } from "react-icons/io"
+
 import { LoadingSpinner } from "./loading"
 import { useAutoAnimate } from "@formkit/auto-animate/react"
-
-dayjs.extend(relativeTime)
-dayjs.extend(updateLocale)
-
-dayjs.updateLocale("en", {
-  relativeTime: {
-    past: "%s",
-    s: "now",
-    m: "1m",
-    mm: "%dm",
-    h: "1h",
-    hh: "%dh",
-    d: "1d",
-    dd: "%dd",
-    M: "1M",
-    MM: "%dM",
-    y: "1Y",
-    yy: "%dY",
-  },
-})
+import { getRelativeTime } from "~/utils/getRelativeTime"
 
 // timecode 49:15
 type PostWithUser = RouterOutputs["posts"]["getAll"][number]
@@ -141,6 +120,7 @@ const PostActions = (props: {
 const PostView = (props: PostWithUser) => {
   const { post, author } = props
   const { user } = useUser()
+  const { mutate } = api.posts.incrementViewCount.useMutation({})
 
   return (
     <div className="flex space-x-4 border-b border-slate-600 p-4" key={post.id}>
@@ -160,15 +140,17 @@ const PostView = (props: PostWithUser) => {
               }`}</span>{" "}
               <span className="text-slate-500">{`@${author.username}`}</span>
             </Link>
-            <span className="font-thin text-slate-500">{` · ${dayjs(
+            <span className="font-thin text-slate-500">{` · ${getRelativeTime(
               post.createdAt
-            ).fromNow()}`}</span>
+            )}`}</span>
           </div>
           <div>
             <DeletePostWizard postId={post.id} authorId={author.id} />
           </div>
         </div>
-        <Link href={`/post/${post.id}`}>
+        <Link
+          href={`/post/${post.id}`}
+          onClick={() => mutate({ postId: post.id })}>
           <span className="text-xl">{post.content}</span>
         </Link>
         <PostActions
