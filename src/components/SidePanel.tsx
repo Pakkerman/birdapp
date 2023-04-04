@@ -46,9 +46,9 @@ const Profile = () => {
           <div className="flex w-16 justify-center lg:w-10">
             <UserButton />
           </div>
-          <div className="hidden h-full pr-2 lg:flex lg:flex-col lg:items-start lg:justify-start">
+          <div className="hidden h-full w-16 pr-2 lg:flex lg:flex-col lg:items-start lg:justify-start">
             <div className="text-md">{username}</div>
-            <div className="text-md  text-slate-500">{`@${user?.username}`}</div>
+            <div className="text-sm  text-slate-500">{`@${user?.username}`}</div>
           </div>
         </div>
       </Link>
@@ -68,10 +68,10 @@ const Profile = () => {
 
 const SidePanel = () => {
   return (
-    <div className="flex h-[100svh] flex-col px-1">
+    <div className="hidden h-[100svh] flex-col px-1 sm:flex">
       <div className="flex h-full flex-col items-end justify-start space-y-6 py-6 lg:items-start lg:pl-8">
         <Link href="/">
-          <div className="flex items-center space-x-2">
+          <div className=" flex items-center space-x-2">
             <div className="flex w-16 justify-center text-violet-400 lg:w-10">
               <GiChicken size={36} />
             </div>
@@ -80,17 +80,19 @@ const SidePanel = () => {
         </Link>
 
         <div className="flex cursor-pointer items-center space-x-2 hover:text-violet-400">
-          <div className="flex w-16 justify-center lg:w-10">
+          <div className=" flex w-16 justify-center lg:w-10">
             <FaHashtag size={28} />
           </div>
-          <h1 className="hidden text-xl lg:block">Emoji Only</h1>
+          <h1 className=" hidden truncate text-clip text-lg lg:block">
+            Emoji Only
+          </h1>
         </div>
 
         <div className="flex cursor-pointer items-center space-x-2 hover:text-violet-400">
           <div className="flex w-16 justify-center lg:w-10">
             <FaInfo size={28} />
           </div>
-          <h1 className="hidden text-xl lg:block">About</h1>
+          <h1 className="hidden text-lg lg:block">About</h1>
         </div>
       </div>
       <Profile />

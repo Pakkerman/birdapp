@@ -15,7 +15,6 @@ import EmojiPicker, { Theme, EmojiStyle } from "emoji-picker-react"
 import { MdOutlineEmojiEmotions } from "react-icons/md"
 
 import { useAutoAnimate } from "@formkit/auto-animate/react"
-import autoAnimate from "@formkit/auto-animate"
 
 const CreatPostWizard = () => {
   const { user } = useUser()
@@ -121,14 +120,14 @@ const CreatPostWizard = () => {
 
 const Feed = () => {
   const { data, isLoading: postsLoading } = api.posts.getAll.useQuery()
-  const [animationParent] = useAutoAnimate()
+  const [autoAnimateparent] = useAutoAnimate()
 
   if (postsLoading) return <LoadingPage />
 
   if (!data) return <div>somehting went wrong</div>
 
   return (
-    <div className="flex flex-col" ref={animationParent}>
+    <div className="flex flex-col" ref={autoAnimateparent}>
       {data.map((fullpost) => (
         <PostView {...fullpost} key={fullpost.post.id} />
       ))}
@@ -173,7 +172,6 @@ const Home: NextPage = () => {
     <>
       <div className="flex w-screen justify-center">
         <PageLayout>
-          <Navbar />
           <div className="border-b border-slate-600 p-4">
             {!isSignedIn && (
               <div className="flex justify-center">

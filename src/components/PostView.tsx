@@ -13,8 +13,7 @@ import { useUser } from "@clerk/nextjs"
 import { AiOutlineClose, AiOutlineHeart, AiFillHeart } from "react-icons/ai"
 import { IoIosStats } from "react-icons/io"
 import { LoadingSpinner } from "./loading"
-import type { Prisma } from "@prisma/client"
-import { useState } from "react"
+import { useAutoAnimate } from "@formkit/auto-animate/react"
 
 dayjs.extend(relativeTime)
 dayjs.extend(updateLocale)
@@ -22,7 +21,7 @@ dayjs.extend(updateLocale)
 dayjs.updateLocale("en", {
   relativeTime: {
     past: "%s",
-    s: "just now",
+    s: "now",
     m: "1m",
     mm: "%dm",
     h: "1h",
@@ -43,6 +42,7 @@ type PostWithUser = RouterOutputs["posts"]["getAll"][number]
 
 const DeletePostWizard = (props: { postId: string; authorId: string }) => {
   const { isSignedIn, user } = useUser()
+
   if (!isSignedIn) return <div></div>
 
   const ctx = api.useContext()
@@ -79,43 +79,60 @@ const PostActions = (props: {
   postId: string
   likeCount: number
   viewCount: number
-  liked: boolean
+  likedUsers: string[]
 }) => {
-  const { likeCount, viewCount, postId, currentUser } = props
+  const { likeCount, viewCount, postId, currentUser, likedUsers } = props
   const ctx = api.useContext()
+  const [autoAnimateparent] = useAutoAnimate()
+
+  let liked = false
+  if (currentUser) {
+    liked = likedUsers.includes(currentUser)
+  }
+
   const { mutate } = api.posts.likePost.useMutation({
     onSuccess: () => {
-      toast.success("Liked emote!")
       void ctx.posts.getAll.invalidate()
+      const message = liked ? "Unlike emote!" : "Like Emote"
+      toast.success(message)
     },
-
     onError: (error) => {
       const errorMessage = error.data?.zodError?.fieldErrors.content
       console.log("errorMessage", errorMessage)
       if (errorMessage && errorMessage[0]) {
         toast.error(errorMessage[0])
       } else {
-        toast.error("Failed to like! Please try again later!")
+        toast.error("Action failed! Please try again later!")
       }
-      toast.error("Failed to like! Please try again later!")
+      toast.error("Action Failed! Please try again later!")
     },
   })
 
   return (
-    <div className=" mt-2 flex space-x-8 text-slate-400">
+    <div className="mt-2 flex space-x-8 text-slate-400">
       <div className="flex cursor-pointer items-center space-x-1">
         <button
           onClick={() => {
             if (!currentUser) return
             mutate({ postId, currentUser })
           }}>
-          <AiOutlineHeart size={24} />
+          <div ref={autoAnimateparent}>
+            {liked ? (
+              <div className="text-red-400">
+                <AiFillHeart size={24} />
+              </div>
+            ) : (
+              <div className="transition hover:scale-110 hover:text-red-400">
+                <AiOutlineHeart size={24} />
+              </div>
+            )}
+          </div>
         </button>
-        <div>{likeCount}</div>
+        <div className="w-2 text-center font-thin">{likeCount}</div>
       </div>
       <div className="flex cursor-pointer space-x-1">
         <IoIosStats size={24} />
-        <div>{viewCount}</div>
+        <div className="w-2 text-center font-thin">{viewCount}</div>
       </div>
     </div>
   )
@@ -123,11 +140,7 @@ const PostActions = (props: {
 
 const PostView = (props: PostWithUser) => {
   const { post, author } = props
-  // const [liked, setLiked] = useState(false)
-  const { user, isSignedIn } = useUser()
-
-  // if (post.likedUsers && post.likedUsers?.includes(user.username))
-  // if (isSignedIn && post?.likedUsers?.includes(user.username))
+  const { user } = useUser()
 
   return (
     <div className="flex space-x-4 border-b border-slate-600 p-4" key={post.id}>
@@ -161,7 +174,7 @@ const PostView = (props: PostWithUser) => {
         <PostActions
           currentUser={user?.username ?? null}
           postId={post.id}
-          liked={false}
+          likedUsers={post.likedUsers as string[]}
           likeCount={post.likeCount ?? 0}
           viewCount={post.viewCount ?? 0}
         />

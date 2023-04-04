@@ -1,17 +1,46 @@
 import type { PropsWithChildren } from "react"
 
 import SidePanel from "./SidePanel"
+import { FlushAllCommand } from "@upstash/redis/types/pkg/commands/flushall"
+
+const Navbar = () => {
+  return (
+    <div className="h-20 ">
+      <div className="flex h-[inherit]  items-center border-b border-slate-600 bg-stone-900 bg-opacity-60 p-3 backdrop-blur-sm">
+        <div>
+          <div className="pl-4 text-2xl font-semibold">Home</div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+const FixedNavbar = () => {
+  return (
+    <div className="fixed z-20 flex h-20 w-full max-w-7xl justify-center">
+      <div className="hidden max-w-[200px] flex-[1_1] sm:block ">
+        <div className="mx-1 w-16 lg:w-10"></div>
+      </div>
+      <div className="h-full max-w-2xl flex-[5_1_500px] overflow-y-auto border-x-[1px] border-slate-600">
+        <Navbar />
+      </div>
+      <div className="hidden max-w-[200px] flex-[1_1] sm:block"></div>
+    </div>
+  )
+}
 
 export const PageLayout = (props: PropsWithChildren) => {
   return (
     <main className="flex h-[100svh] w-full max-w-7xl justify-center">
-      <div className="max-w-[200px] flex-[1_1_50px] sm:block">
+      <FixedNavbar />
+      <div className="z-30 hidden max-w-[200px] flex-[1_1] sm:block">
         <SidePanel />
       </div>
-      <div className="h-full  max-w-2xl flex-[5_1_500px] overflow-y-auto border-x-[1px] border-slate-600">
+      <div className=" h-full max-w-2xl flex-[5_1_500px] overflow-y-auto border-x-[1px] border-slate-600">
+        <div className="h-20"></div>
         {props.children}
       </div>
-      <div className="hidden max-w-[200px] flex-[1_1] sm:block"></div>
+      <div className="z-30 hidden max-w-[200px] flex-[1_1] sm:block"></div>
     </main>
   )
 }
