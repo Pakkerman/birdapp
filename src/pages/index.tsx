@@ -147,6 +147,12 @@ const Navbar = () => {
   )
 }
 
+const TestCounter = () => {
+  const ctx = api.useContext()
+
+  return <div></div>
+}
+
 const Home: NextPage = () => {
   const { isLoaded: userLoaded, isSignedIn, user } = useUser()
   // start fetch asap, and the result will be cache by react query

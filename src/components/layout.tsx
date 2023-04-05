@@ -4,7 +4,7 @@ import SidePanel from "./SidePanel"
 
 const Navbar = () => {
   return (
-    <div className="flex h-[inherit]  items-center border-b border-slate-600 bg-stone-900 bg-opacity-60 p-3 backdrop-blur-sm">
+    <div className="flex h-[inherit]  items-center border-b border-slate-600 bg-zinc-900 bg-opacity-60 p-3 backdrop-blur-sm">
       <div>
         <div className="pl-4 text-xl font-semibold sm:text-2xl">Home</div>
       </div>

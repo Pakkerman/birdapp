@@ -133,16 +133,12 @@ export const postsRouter = createTRPCRouter({
         ) as Prisma.JsonArray
       }
 
-      const updatedPost = await prisma.post.update({
-        where: { id: input.postId },
-        data: {
-          likedUsers: updateUserArray,
-        },
-      })
-
       const post = await ctx.prisma.post.update({
         where: { id: input.postId },
-        data: { likeCount: updateUserArray.length },
+        data: {
+          likeCount: updateUserArray.length,
+          likedUsers: updateUserArray,
+        },
       })
       return post
     }),

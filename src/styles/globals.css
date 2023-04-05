@@ -5,7 +5,7 @@
 @tailwind utilities;
 
 body {
-  @apply w-screen bg-stone-900 text-slate-100;
+  @apply w-screen  bg-zinc-900 text-slate-100;
   font-family: "raleway";
 
   /* overscroll-behavior: none; */
