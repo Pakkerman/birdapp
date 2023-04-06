@@ -36,7 +36,7 @@ const CreatPostWizard = () => {
       if (errorMessage && errorMessage[0]) {
         toast.error(errorMessage[0])
       } else {
-        toast.error("Failed to post! Please try again later!")
+        toast.error(error.message)
       }
     },
   })

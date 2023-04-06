@@ -15,8 +15,6 @@ import { filterUserForClient } from "~/server/helpers/filterUserForClients"
 import type { Post, Prisma } from "@prisma/client"
 import unknownUser from "/public/unknownUser.png"
 
-// Create a new ratelimiter, that allows 10 requests per 10 secs
-
 const addUserDataToPost = async (posts: Post[]) => {
   const users = (
     await clerkClient.users.getUserList({
@@ -27,12 +25,6 @@ const addUserDataToPost = async (posts: Post[]) => {
 
   return posts.map((post) => {
     const author = users.find((user) => user.id === post.authorId)
-
-    // if (!author || !author.username)
-    //   throw new TRPCError({
-    //     code: "INTERNAL_SERVER_ERROR",
-    //     message: "Author for post not found",
-    //   })
 
     if (!author || !author.username)
       return {
@@ -50,9 +42,11 @@ const addUserDataToPost = async (posts: Post[]) => {
 }
 
 // ratelimiter
+// Create a new ratelimiter, that allows 10 requests per 10 secs
+
 const ratelimit = new Ratelimit({
   redis: Redis.fromEnv(),
-  limiter: Ratelimit.slidingWindow(2, "10 s"),
+  limiter: Ratelimit.slidingWindow(1, "15 s"),
   analytics: true,
 })
 
@@ -83,7 +77,7 @@ export const postsRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const post = await ctx.prisma.post.findUnique({ where: { id: input.id } })
 
-      if (!post) throw new TRPCError({ code: "NOT_FOUND" })
+      if (!post) throw new TRPCError({ code: "NOT_FOUND", message: "" })
 
       return (await addUserDataToPost([post]))[0]
     }),
@@ -99,7 +93,11 @@ export const postsRouter = createTRPCRouter({
 
       // Handle ratelimit
       const { success } = await ratelimit.limit(authorId)
-      if (!success) throw new TRPCError({ code: "TOO_MANY_REQUESTS" })
+      if (!success)
+        throw new TRPCError({
+          code: "TOO_MANY_REQUESTS",
+          message: "You emote too frequent, slow down!",
+        })
 
       const post = await ctx.prisma.post.create({
         data: {
