@@ -2,9 +2,10 @@ import { useUser, SignOutButton, SignInButton, UserButton } from "@clerk/nextjs"
 
 import Link from "next/link"
 import { FaHashtag, FaInfo } from "react-icons/fa"
-import { GiChicken } from "react-icons/gi"
 import { BiLogOutCircle, BiLogInCircle } from "react-icons/bi"
 import { LoadingSpinner } from "./loading"
+
+import BirdAppIcon from "./BirdAppIcon"
 
 const Profile = () => {
   const { user, isLoaded } = useUser()
@@ -70,15 +71,7 @@ const SidePanel = () => {
   return (
     <div className="hidden h-[100svh] flex-col px-1 sm:flex">
       <div className="flex h-full flex-col items-end justify-start space-y-6 py-6 lg:items-start lg:pl-8">
-        <Link href="/">
-          <div className=" flex items-center space-x-2">
-            <div className="flex w-16 justify-center text-violet-400 lg:w-10">
-              <GiChicken size={36} />
-            </div>
-            <h1 className="hidden text-xl lg:block">Bird App</h1>
-          </div>
-        </Link>
-
+        <BirdAppIcon size={36} />
         <div className="flex cursor-pointer items-center space-x-2 hover:text-violet-400">
           <div className=" flex w-16 justify-center lg:w-10">
             <FaHashtag size={28} />

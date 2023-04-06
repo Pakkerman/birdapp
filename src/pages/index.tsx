@@ -118,7 +118,7 @@ const CreatPostWizard = () => {
   )
 }
 
-const Feed = () => {
+const PostFeed = () => {
   const { data, isLoading: postsLoading } = api.posts.getAll.useQuery()
   const [autoAnimateparent] = useAutoAnimate()
 
@@ -186,7 +186,7 @@ const Home: NextPage = () => {
             )}
             {isSignedIn && <CreatPostWizard />}
           </div>
-          <Feed />
+          <PostFeed />
         </PageLayout>
       </div>
     </>
