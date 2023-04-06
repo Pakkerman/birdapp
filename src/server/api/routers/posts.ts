@@ -13,7 +13,7 @@ import { Ratelimit } from "@upstash/ratelimit"
 import { Redis } from "@upstash/redis"
 import { filterUserForClient } from "~/server/helpers/filterUserForClients"
 import type { Post, Prisma } from "@prisma/client"
-import { prisma } from "~/server/db"
+import unknownUser from "/public/unknownUser.png"
 
 // Create a new ratelimiter, that allows 10 requests per 10 secs
 
@@ -28,11 +28,22 @@ const addUserDataToPost = async (posts: Post[]) => {
   return posts.map((post) => {
     const author = users.find((user) => user.id === post.authorId)
 
+    // if (!author || !author.username)
+    //   throw new TRPCError({
+    //     code: "INTERNAL_SERVER_ERROR",
+    //     message: "Author for post not found",
+    //   })
+
     if (!author || !author.username)
-      throw new TRPCError({
-        code: "INTERNAL_SERVER_ERROR",
-        message: "Author for post not found",
-      })
+      return {
+        post,
+        author: {
+          id: "xxx",
+          profileImageUrl: unknownUser,
+          username: "unknown",
+          authorName: "Unknown User",
+        },
+      }
 
     return { post, author: { ...author, username: author.username } }
   })
