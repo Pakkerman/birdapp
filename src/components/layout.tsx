@@ -1,4 +1,5 @@
-import { PropsWithChildren, useState } from "react"
+import { useState } from "react"
+import type { PropsWithChildren } from "react"
 
 import SidePanel from "./SidePanel"
 import Navbar from "./Navbar"

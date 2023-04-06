@@ -14,7 +14,6 @@ import { LoadingSpinner } from "./loading"
 import { useAutoAnimate } from "@formkit/auto-animate/react"
 import { getRelativeTime } from "~/utils/getRelativeTime"
 import { useQueryClient } from "@tanstack/react-query"
-import { useState } from "react"
 
 // timecode 49:15
 type PostWithUser = RouterOutputs["posts"]["getAll"][number]

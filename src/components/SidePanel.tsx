@@ -80,7 +80,6 @@ const SidePanel = () => {
             Emoji Only
           </h1>
         </div>
-
         <div className="flex cursor-pointer items-center space-x-2 hover:text-violet-400">
           <div className="flex w-16 justify-center lg:w-10">
             <FaInfo size={28} />
