@@ -94,7 +94,7 @@ const PostActions = (props: {
       <div
         ref={autoAnimateparent}
         className={`flex cursor-pointer items-center space-x-1 ${
-          liked && "text-red-400"
+          liked ? "text-red-400" : ""
         }`}>
         <button
           onClick={() => {
@@ -117,7 +117,7 @@ const PostActions = (props: {
       </div>
       <div
         className={`flex cursor-pointer space-x-1 ${
-          viewCount !== 0 && "text-violet-400"
+          viewCount != 0 ? "text-violet-400" : ""
         }`}>
         <IoIosStats size={24} />
         <div className="w-2 text-center font-thin">{viewCount}</div>
