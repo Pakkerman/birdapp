@@ -1,8 +1,6 @@
 import { clerkClient } from "@clerk/nextjs/server"
-import { TRPCClientError } from "@trpc/client"
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
-import Trpc from "~/pages/api/trpc/[trpc]"
 import {
   createTRPCRouter,
   privateProcedure,
@@ -30,7 +28,7 @@ const addUserDataToPost = async (posts: Post[]) => {
       return {
         post,
         author: {
-          id: "xxx",
+          id: "deleted-user",
           profileImageUrl: unknownUser,
           username: "unknown",
           authorName: "Unknown User",

@@ -90,16 +90,20 @@ const PostActions = (props: {
   })
 
   return (
-    <div className="mt-2 flex space-x-8 text-slate-400">
-      <div className="flex cursor-pointer items-center space-x-1">
+    <div className="mt-2 flex space-x-8  text-slate-400">
+      <div
+        ref={autoAnimateparent}
+        className={`flex cursor-pointer items-center space-x-1 ${
+          liked && "text-red-400"
+        }`}>
         <button
           onClick={() => {
             if (!currentUser) return
             mutate({ postId, currentUser })
           }}>
-          <div ref={autoAnimateparent}>
+          <div>
             {liked ? (
-              <div className="text-red-400">
+              <div className="transition hover:scale-110">
                 <AiFillHeart size={24} />
               </div>
             ) : (
@@ -111,7 +115,10 @@ const PostActions = (props: {
         </button>
         <div className="w-2 text-center font-thin">{likeCount}</div>
       </div>
-      <div className="flex cursor-pointer space-x-1">
+      <div
+        className={`flex cursor-pointer space-x-1 ${
+          viewCount !== 0 && "text-violet-400"
+        }`}>
         <IoIosStats size={24} />
         <div className="w-2 text-center font-thin">{viewCount}</div>
       </div>
