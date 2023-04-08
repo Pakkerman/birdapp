@@ -24,11 +24,11 @@ const Profile = () => {
     return (
       <div>
         <SignInButton>
-          <div className=" flex h-14 cursor-pointer items-center justify-end space-x-2 pb-2 hover:text-violet-400 lg:justify-start lg:pl-8 ">
-            <div className=" flex w-16 cursor-pointer justify-center lg:w-10">
+          <div className="flex h-14 cursor-pointer items-center justify-end space-x-2 pb-2 hover:text-violet-400 lg:justify-start lg:pl-8 ">
+            <div className="flex w-16 cursor-pointer justify-center lg:w-10">
               <BiLogInCircle size={36} />
             </div>
-            <div className="hidden h-full pr-2 lg:flex lg:flex-col lg:items-center lg:justify-center ">
+            <div className="hidden h-full pr-2 lg:flex lg:flex-col lg:items-center lg:justify-center">
               <button className="text-lg">Sign In</button>
             </div>
           </div>
@@ -48,7 +48,7 @@ const Profile = () => {
             <UserButton />
           </div>
           <div className="hidden h-full w-16 pr-2 lg:flex lg:flex-col lg:items-start lg:justify-start">
-            <div className="text-md">{username}</div>
+            <div className=" text-md truncate text-clip">{username}</div>
             <div className="text-sm  text-slate-500">{`@${user?.username}`}</div>
           </div>
         </div>

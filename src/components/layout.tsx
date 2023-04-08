@@ -36,7 +36,14 @@ export const PageLayout = (props: PropsWithChildren) => {
         {props.children}
       </div>
       <div className="z-30 hidden max-w-[200px] flex-[1_1] sm:block"></div>
-      <MobileMenu show={showMobileMenu} />
+      <div>
+        {showMobileMenu && (
+          <MobileMenu
+            showMobileMenu={showMobileMenu}
+            setShowMobileMenu={setShowMobileMenu}
+          />
+        )}
+      </div>
     </main>
   )
 }

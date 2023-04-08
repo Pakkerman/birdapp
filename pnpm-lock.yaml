@@ -2,6 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@clerk/nextjs': ^4.11.13
+  '@clerk/themes': ^1.5.2
   '@formkit/auto-animate': ^1.0.0-beta.6
   '@prisma/client': ^4.9.0
   '@tanstack/react-query': ^4.20.2
@@ -40,6 +41,7 @@ specifiers:
 
 dependencies:
   '@clerk/nextjs': 4.14.2_ld2jel3hspngo3u5lti2kgl2sq
+  '@clerk/themes': 1.5.2_react@18.2.0
   '@formkit/auto-animate': 1.0.0-beta.6
   '@prisma/client': 4.12.0_prisma@4.12.0
   '@tanstack/react-query': 4.28.0_biqbaboplfbrettd7655fr4n2y
@@ -148,6 +150,15 @@ packages:
 
   /@clerk/shared/0.15.1_react@18.2.0:
     resolution: {integrity: sha512-C1Oou0Ksz5pxtJ8cMqx/XT2mVjJksQjV/OmPgvv5koGOuZowZA4yH+gEpwUOb16z7tKQkoRYZ4BO8DebGutkGQ==}
+    peerDependencies:
+      react: '>=16'
+    dependencies:
+      react: 18.2.0
+    dev: false
+
+  /@clerk/themes/1.5.2_react@18.2.0:
+    resolution: {integrity: sha512-wyA/sfzJkgAGBpsi3AU2KEQIVC+nSu8aI8blqOJKOlDGtbgL4GuszJzXUqBJkPG+UjdW43G850eFGrBqOtrQUw==}
+    engines: {node: '>=14'}
     peerDependencies:
       react: '>=16'
     dependencies:

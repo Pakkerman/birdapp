@@ -3,8 +3,8 @@ import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai"
 import { GiChicken } from "react-icons/gi"
 
 const Navbar = (props: {
-  showMobileMenu: boolean
   title: string
+  showMobileMenu: boolean
   setShowMobileMenu: (currentShowState: boolean) => void
 }) => {
   const { showMobileMenu, setShowMobileMenu, title } = props
@@ -25,11 +25,7 @@ const Navbar = (props: {
           className="transition hover:scale-110"
           ref={animationParent}
           onClick={() => setShowMobileMenu(!showMobileMenu)}>
-          {showMobileMenu ? (
-            <AiOutlineClose size={24} />
-          ) : (
-            <AiOutlineMenu size={24} />
-          )}
+          <AiOutlineMenu size={24} />
         </button>
       </div>
     </div>
