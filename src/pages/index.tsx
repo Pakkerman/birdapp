@@ -1,4 +1,4 @@
-import { SignInButton, SignUpButton, useUser } from "@clerk/nextjs"
+import { useUser } from "@clerk/nextjs"
 
 import { type NextPage } from "next"
 import Image from "next/image"
@@ -6,16 +6,17 @@ import Image from "next/image"
 import { api } from "~/utils/api"
 
 import { useEffect, useState } from "react"
+
 import { PageLayout } from "~/components/layout"
 import { LoadingPage, LoadingSpinner } from "~/components/loading"
+import LoginFooter from "~/components/LoginFooter"
 import PostView from "~/components/PostView"
 import toast from "react-hot-toast"
+
+// Libs
 import EmojiPicker, { Theme, EmojiStyle } from "emoji-picker-react"
-
 import { MdOutlineEmojiEmotions } from "react-icons/md"
-
 import { useAutoAnimate } from "@formkit/auto-animate/react"
-import LoginFooter from "~/components/LoginFooter"
 
 const CreatPostWizard = () => {
   const { user } = useUser()
