@@ -20,3 +20,7 @@ body {
   /* @apply border-[0.5px] border-red-400   sm:border-blue-400 md:border-green-400 lg:border-cyan-400; */
   @apply bg-red-400 bg-opacity-30  sm:bg-blue-400 sm:bg-opacity-30 md:bg-green-400  md:bg-opacity-30 lg:bg-cyan-400 lg:bg-opacity-30;
 }
+
+.custom-backdrop {
+  @apply bg-zinc-900 bg-opacity-60 backdrop-blur-sm;
+}

@@ -1,11 +1,11 @@
-import { SignInButton, useUser } from "@clerk/nextjs"
+import { SignInButton, SignUpButton, useUser } from "@clerk/nextjs"
 
 import { type NextPage } from "next"
 import Image from "next/image"
 
 import { api } from "~/utils/api"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { PageLayout } from "~/components/layout"
 import { LoadingPage, LoadingSpinner } from "~/components/loading"
 import PostView from "~/components/PostView"
@@ -15,6 +15,7 @@ import EmojiPicker, { Theme, EmojiStyle } from "emoji-picker-react"
 import { MdOutlineEmojiEmotions } from "react-icons/md"
 
 import { useAutoAnimate } from "@formkit/auto-animate/react"
+import LoginFooter from "~/components/LoginFooter"
 
 const CreatPostWizard = () => {
   const { user } = useUser()
@@ -40,6 +41,18 @@ const CreatPostWizard = () => {
       }
     },
   })
+
+  // click away to close the emoji picker
+  useEffect(() => {
+    const emojiClickAway = document.querySelector("#emoji-click-away")
+    const handleClick = () => setShowEmojiKeyboard(false)
+
+    emojiClickAway?.addEventListener("click", handleClick)
+
+    return () => {
+      emojiClickAway?.removeEventListener("click", handleClick)
+    }
+  }, [showEmojiKeyboard])
 
   if (!user) return null
 
@@ -99,20 +112,27 @@ const CreatPostWizard = () => {
           </button>
         </div>
         {showEmojiKeyboard && (
-          <div className="preview relative">
-            <div className="preview absolute top-[-40px] left-[-50px] z-20 scale-75 overflow-hidden rounded-xl border-2 border-violet-900">
-              <EmojiPicker
-                height={400}
-                width={300}
-                searchDisabled
-                skinTonesDisabled
-                theme={Theme.DARK}
-                emojiStyle={EmojiStyle.TWITTER}
-                onEmojiClick={({ emoji }) => setInput(input + emoji)}
-              />
-            </div>
-          </div>
+          <div
+            id="emoji-click-away"
+            className="fixed left-0 top-0 z-10 h-screen w-screen"
+          />
         )}
+        <div className="relative">
+          <div
+            className={`absolute left-[-50px] top-[-40px] z-20 scale-75 overflow-hidden rounded-xl border-2 border-violet-900 transition ${
+              showEmojiKeyboard ? "visible" : "invisible"
+            } `}>
+            <EmojiPicker
+              height={400}
+              width={300}
+              searchDisabled
+              skinTonesDisabled
+              theme={Theme.DARK}
+              emojiStyle={EmojiStyle.TWITTER}
+              onEmojiClick={({ emoji }) => setInput(input + emoji)}
+            />
+          </div>
+        </div>
       </div>
     </div>
   )
@@ -178,14 +198,12 @@ const Home: NextPage = () => {
     <>
       <div className="flex w-screen justify-center">
         <PageLayout>
-          <div className="border-b border-slate-600 p-4">
-            {!isSignedIn && (
-              <div className="flex justify-center">
-                <SignInButton />
-              </div>
-            )}
-            {isSignedIn && <CreatPostWizard />}
-          </div>
+          {!isSignedIn && <LoginFooter />}
+          {isSignedIn && (
+            <div className="border-b border-slate-600 p-4">
+              <CreatPostWizard />
+            </div>
+          )}
           <PostFeed />
         </PageLayout>
       </div>
