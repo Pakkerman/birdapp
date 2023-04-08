@@ -1,22 +1,82 @@
-import { UserButton, useUser } from "@clerk/nextjs"
-import { useEffect, useState } from "react"
+import { SignOutButton, UserButton } from "@clerk/nextjs"
+import { useCallback, useEffect, useState } from "react"
 import { AiOutlineClose } from "react-icons/ai"
+import useUserDetails from "../hooks/useUserDetails"
+
+import Link from "next/link"
+import { FaHashtag, FaInfo } from "react-icons/fa"
+import { BiLogOutCircle } from "react-icons/bi"
+import BirdAppIcon from "./BirdAppIcon"
+
+const MobileMenuProfile = () => {
+  const { fullName, username, isSignedIn } = useUserDetails()
+  return (
+    <div>
+      {isSignedIn && (
+        <div>
+          <div className="flex items-center justify-start space-x-2">
+            <div className="flex w-12 justify-center">
+              <UserButton />
+            </div>
+            <div className="my-4 flex flex-col">
+              <div className="text-md truncate text-clip">{fullName}</div>
+              <div className="text-sm text-slate-500">{`@${username}`}</div>
+            </div>
+          </div>
+          <SignOutButton>
+            <div className="flex items-center space-x-2">
+              <div className="flex w-12 justify-center">
+                <BiLogOutCircle size={36} />
+              </div>
+              <div className="">
+                <div className="">Sign Out</div>
+              </div>
+            </div>
+          </SignOutButton>
+        </div>
+      )}
+    </div>
+  )
+}
+
+const MobileMenuItems = () => {
+  return (
+    <section className=" flex flex-col space-y-6">
+      <Link href="/">
+        <div className="flex items-center space-x-2">
+          <div className="flex w-12 justify-center">
+            <BirdAppIcon size={42} />
+          </div>
+          <p className="text-xl">Bird App</p>
+        </div>
+      </Link>
+      <div className="flex flex-col space-y-4">
+        <div className=" flex items-center space-x-2">
+          <div className=" flex w-12 justify-center">
+            <FaHashtag size={36} />
+          </div>
+          <p className="text-xl">Emojis Only!</p>
+        </div>
+      </div>
+      <Link href="/about">
+        <div className="flex flex-col space-y-4">
+          <div className="flex items-center space-x-2">
+            <div className="  flex w-12 justify-center">
+              <FaInfo size={36} />
+            </div>
+            <p className="text-xl">About</p>
+          </div>
+        </div>
+      </Link>
+    </section>
+  )
+}
 
 const MobileMenuContent = () => {
-  const { user } = useUser()
-
-  if (!user) return <div></div>
-
-  const fullName = `${user?.firstName ?? ""} ${user?.lastName ?? ""}`
-  const username = fullName === " " ? user.username : fullName
-
   return (
-    <div className="mx-4 flex flex-col justify-end ">
-      <div className="py-2">
-        <UserButton />
-      </div>
-      <div className=" text-md truncate text-clip">{username}</div>
-      <div className="text-sm  text-slate-500">{`@${user.username ?? ""}`}</div>
+    <div className=" m-6 flex h-[85svh] flex-col justify-between">
+      <MobileMenuItems />
+      <MobileMenuProfile />
     </div>
   )
 }
@@ -28,19 +88,20 @@ const MobileMenu = (props: {
   const [windowWidth, setWindowWidth] = useState(0)
   const [showComponent, setShowComponent] = useState(false)
 
-  const closeMobileMenu = () => {
+  const closeMobileMenu = useCallback(() => {
     setShowComponent(false)
     setTimeout(() => {
       props.setShowMobileMenu(!props.showMobileMenu)
     }, 100)
-  }
+  }, [props])
 
-  // delay show comeponent to enable animation to playout
+  // Delay show comeponent to enable animation to play out
   useEffect(() => {
     const timeoutId = setTimeout(() => setShowComponent(true), 100)
     return () => clearTimeout(timeoutId)
   }, [])
 
+  // EventListener for resizing and click aways to close mobile menu
   useEffect(() => {
     const mobileMenuClickaway = document?.querySelector(
       "#mobile-menu-clickaway"
@@ -60,7 +121,7 @@ const MobileMenu = (props: {
       window.removeEventListener("resize", handleResize)
       window.addEventListener("click", handleClick)
     }
-  }, [])
+  }, [closeMobileMenu])
 
   if (windowWidth >= 768) {
     props.setShowMobileMenu(false)

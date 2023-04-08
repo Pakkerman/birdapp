@@ -1,5 +1,5 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react"
-import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai"
+import { AiOutlineMenu } from "react-icons/ai"
 import { GiChicken } from "react-icons/gi"
 
 const Navbar = (props: {
