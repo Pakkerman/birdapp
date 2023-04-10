@@ -14,7 +14,7 @@ const FixedNavbar = (props: any) => {
       <div className="h-full max-w-2xl flex-[5_1_500px] overflow-y-auto border-x-[1px] border-slate-600">
         <Navbar {...props} />
       </div>
-      <div className="hidden max-w-[200px] flex-[1_1] sm:block"></div>
+      <div className="hidden max-w-[200px] flex-[0.5_0.5] sm:block"></div>
     </div>
   )
 }
@@ -35,7 +35,7 @@ export const PageLayout = (props: PropsWithChildren) => {
         <div className="h-14 sm:h-20" />
         {props.children}
       </div>
-      <div className="z-30 hidden max-w-[200px] flex-[1_1] sm:block"></div>
+      <div className="z-30 hidden max-w-[200px] flex-[0.5_0.5] sm:block"></div>
       <div>
         {showMobileMenu && (
           <MobileMenu

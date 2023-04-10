@@ -8,38 +8,10 @@ import BirdAppIcon from "./BirdAppIcon"
 import useUserDetails from "~/hooks/useUserDetails"
 
 const Profile = () => {
-  // const { user, isLoaded } = useUser()
   const { isSignedIn } = useAuth()
   const { fullName, username } = useUserDetails()
 
   if (!isSignedIn) return <div></div>
-
-  // if (!isLoaded) {
-  //   return (
-  //     <div className="flex h-20 justify-end space-x-2 pb-4 lg:justify-start lg:pl-8">
-  //       <div className="flex h-full w-16 items-center justify-center lg:w-10">
-  //         <LoadingSpinner size={48} />
-  //       </div>
-  //     </div>
-  //   )
-  // }
-
-  // if (!user || !user.username) {
-  //   return (
-  //     <div>
-  //       <SignInButton>
-  //         <div className="flex h-14 cursor-pointer items-center justify-end space-x-2 pb-2 hover:text-violet-400 lg:justify-start lg:pl-8 ">
-  //           <div className="flex w-16 cursor-pointer justify-center lg:w-10">
-  //             <BiLogInCircle size={36} />
-  //           </div>
-  //           <div className="hidden h-full pr-2 lg:flex lg:flex-col lg:items-center lg:justify-center">
-  //             <button className="text-lg">Sign In</button>
-  //           </div>
-  //         </div>
-  //       </SignInButton>
-  //     </div>
-  //   )
-  // }
 
   return (
     <div>
@@ -50,7 +22,7 @@ const Profile = () => {
           </div>
           <div className="hidden h-full w-16 pr-2 lg:flex lg:flex-col lg:items-start lg:justify-start">
             <div className=" text-md truncate text-clip">{fullName}</div>
-            <div className="text-sm  text-slate-500">{`@${username}`}</div>
+            <div className=" text-sm text-slate-500">{`@${username}`}</div>
           </div>
         </div>
       </Link>

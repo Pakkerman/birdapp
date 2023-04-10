@@ -34,7 +34,7 @@ const ProfileFeed = (props: { userId: string }) => {
   )
 }
 
-const Navbar = (props: { username: string; userId: string }) => {
+const LocalNavbar = (props: { username: string; userId: string }) => {
   const { data, isLoading } = usePosts(props.userId)
   const { username } = props
 
@@ -72,7 +72,8 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
       </Head>
       <div className="flex w-screen justify-center">
         <PageLayout>
-          <Navbar username={username} userId={data.id} />
+          <LocalNavbar username={username} userId={data.id} />
+
           <div className="relative h-36 bg-slate-600">
             <Image
               src={data.profileImageUrl}

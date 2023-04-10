@@ -7,13 +7,14 @@ import { api } from "~/utils/api"
 
 import { useEffect, useState } from "react"
 
+// Compoenets
 import { PageLayout } from "~/components/layout"
 import { LoadingPage, LoadingSpinner } from "~/components/loading"
 import LoginFooter from "~/components/LoginFooter"
 import PostView from "~/components/PostView"
 import toast from "react-hot-toast"
 
-// Libs
+// Libraries
 import EmojiPicker, { Theme, EmojiStyle } from "emoji-picker-react"
 import { MdOutlineEmojiEmotions } from "react-icons/md"
 import { useAutoAnimate } from "@formkit/auto-animate/react"
@@ -144,7 +145,6 @@ const PostFeed = () => {
   const [autoAnimateparent] = useAutoAnimate()
 
   if (postsLoading) return <LoadingPage />
-
   if (!data) return <div>somehting went wrong</div>
 
   return (

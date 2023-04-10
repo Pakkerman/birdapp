@@ -11,7 +11,7 @@ import { Ratelimit } from "@upstash/ratelimit"
 import { Redis } from "@upstash/redis"
 import { filterUserForClient } from "~/server/helpers/filterUserForClients"
 import type { Post, Prisma } from "@prisma/client"
-import unknownUser from "/public/unknownUser.png"
+import unknownUser from "/public/images/unknownUser.png"
 
 const addUserDataToPost = async (posts: Post[]) => {
   const users = (

@@ -13,7 +13,6 @@ import { IoIosStats } from "react-icons/io"
 import { LoadingSpinner } from "./loading"
 import { useAutoAnimate } from "@formkit/auto-animate/react"
 import { getRelativeTime } from "~/utils/getRelativeTime"
-import { useQueryClient } from "@tanstack/react-query"
 
 // timecode 49:15
 type PostWithUser = RouterOutputs["posts"]["getAll"][number]
@@ -64,7 +63,6 @@ const PostActions = (props: {
   const { likeCount, viewCount, postId, currentUser, likedUsers } = props
   const ctx = api.useContext()
   const [autoAnimateparent] = useAutoAnimate()
-  const queryClient = useQueryClient()
 
   let liked = false
   if (currentUser) {

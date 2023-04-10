@@ -1,4 +1,4 @@
-import { SignOutButton, UserButton } from "@clerk/nextjs"
+import { SignOutButton, UserButton, useUser } from "@clerk/nextjs"
 import { useCallback, useEffect, useState } from "react"
 import { AiOutlineClose } from "react-icons/ai"
 import useUserDetails from "../hooks/useUserDetails"
@@ -8,8 +8,15 @@ import { FaHashtag, FaInfo } from "react-icons/fa"
 import { BiLogOutCircle } from "react-icons/bi"
 import BirdAppIcon from "./BirdAppIcon"
 
-const MobileMenuProfile = () => {
+const MobileMenuProfile = (props: {
+  setShowComponent: (show: boolean) => void
+}) => {
   const { fullName, username, isSignedIn } = useUserDetails()
+
+  const handleClick = () => {
+    props.setShowComponent(false)
+  }
+
   return (
     <div>
       {isSignedIn && (
@@ -24,8 +31,10 @@ const MobileMenuProfile = () => {
             </div>
           </div>
           <SignOutButton>
-            <div className="flex items-center space-x-2">
-              <div className="flex w-12 justify-center">
+            <div
+              className="flex items-center space-x-2 hover:cursor-pointer hover:text-violet-400"
+              onClick={handleClick}>
+              <div className="flex w-12 justify-center ">
                 <BiLogOutCircle size={36} />
               </div>
               <div className="">
@@ -72,11 +81,13 @@ const MobileMenuItems = () => {
   )
 }
 
-const MobileMenuContent = () => {
+const MobileMenuContent = (props: {
+  setShowComponent: (show: boolean) => void
+}) => {
   return (
     <div className=" m-6 flex h-[85svh] flex-col justify-between">
       <MobileMenuItems />
-      <MobileMenuProfile />
+      <MobileMenuProfile {...props} />
     </div>
   )
 }
@@ -146,7 +157,7 @@ const MobileMenu = (props: {
             <AiOutlineClose size={28} />
           </button>
         </div>
-        <MobileMenuContent />
+        <MobileMenuContent setShowComponent={setShowComponent} />
       </div>
     </div>
   )
