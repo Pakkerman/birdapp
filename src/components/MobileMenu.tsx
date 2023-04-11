@@ -1,4 +1,4 @@
-import { SignOutButton, UserButton, useUser } from "@clerk/nextjs"
+import { SignOutButton, UserButton } from "@clerk/nextjs"
 import { useCallback, useEffect, useState } from "react"
 import { AiOutlineClose } from "react-icons/ai"
 import useUserDetails from "../hooks/useUserDetails"

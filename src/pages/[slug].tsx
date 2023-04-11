@@ -71,7 +71,7 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
         <title>{data.authorName}</title>
       </Head>
       <div className="flex w-screen justify-center">
-        <PageLayout>
+        <PageLayout navbarTitle="Profile">
           <LocalNavbar username={username} userId={data.id} />
 
           <div className="relative h-36 bg-slate-600">

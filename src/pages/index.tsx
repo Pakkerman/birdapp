@@ -5,9 +5,8 @@ import Image from "next/image"
 
 import { api } from "~/utils/api"
 
+// react
 import { useEffect, useState } from "react"
-
-// Compoenets
 import { PageLayout } from "~/components/layout"
 import { LoadingPage, LoadingSpinner } from "~/components/loading"
 import LoginFooter from "~/components/LoginFooter"
@@ -156,17 +155,17 @@ const PostFeed = () => {
   )
 }
 
-const Navbar = () => {
-  return (
-    <div className="h-20 ">
-      <div className=" fixed z-20 flex h-[inherit]  items-center border-b border-slate-600 bg-stone-900 bg-opacity-60 p-3 backdrop-blur-sm">
-        <div>
-          <div className="pl-4 text-2xl font-semibold">Home</div>
-        </div>
-      </div>
-    </div>
-  )
-}
+// const Navbar = () => {
+//   return (
+//     <div className="h-20 ">
+//       <div className=" fixed z-20 flex h-[inherit]  items-center border-b border-slate-600 bg-stone-900 bg-opacity-60 p-3 backdrop-blur-sm">
+//         <div>
+//           <div className="pl-4 text-2xl font-semibold">Home</div>
+//         </div>
+//       </div>
+//     </div>
+//   )
+// }
 
 const TestCounter = () => {
   const ctx = api.useContext()
@@ -198,7 +197,7 @@ const Home: NextPage = () => {
   return (
     <>
       <div className="flex w-screen justify-center">
-        <PageLayout>
+        <PageLayout navbarTitle="Home">
           {!isSignedIn && <LoginFooter />}
           {isSignedIn && (
             <div className="border-b border-slate-600 p-4">

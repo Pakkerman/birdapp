@@ -28,12 +28,14 @@ const SinglePostPage: NextPage<{ id: string }> = ({ id }) => {
       </Head>
       <main>
         <div className="flex w-screen justify-center">
-          <PageLayout>
+          <PageLayout navbarTitle="Emotes">
             <div className="flex h-20 items-center border-b border-slate-600 p-3">
               <Link href="/">
                 <AiOutlineArrowLeft size={24} />
               </Link>
-              <div className="pl-4 text-2xl font-semibold">Emote</div>
+              <div className="pl-4 text-2xl font-semibold">
+                Post by {data.author.authorName}
+              </div>
             </div>
             <PostView {...data} />
           </PageLayout>
