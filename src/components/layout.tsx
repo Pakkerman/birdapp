@@ -1,4 +1,4 @@
-import { useState, type PropsWithChildren, createContext } from "react"
+import { useState, type PropsWithChildren } from "react"
 
 import SidePanel from "./SidePanel"
 import Navbar from "./Navbar"
@@ -36,8 +36,6 @@ export const PageLayout = (
   props: PropsWithChildren & { navbarTitle: string }
 ) => {
   const [showMobileMenu, setShowMobileMenu] = useState(false)
-
-  console.log(props.navbarTitle)
 
   return (
     <main className="flex h-[100svh] w-full max-w-7xl justify-center">

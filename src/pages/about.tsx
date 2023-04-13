@@ -4,7 +4,7 @@ import { PageLayout } from "~/components/layout"
 const about = () => {
   return (
     <div>
-      <PageLayout>This is about page</PageLayout>
+      <PageLayout navbarTitle="About">This is about page</PageLayout>
     </div>
   )
 }

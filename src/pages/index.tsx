@@ -27,12 +27,39 @@ const CreatPostWizard = () => {
   const ctx = api.useContext()
 
   const { mutate, isLoading: isPosting } = api.posts.create.useMutation({
-    onSuccess: () => {
-      setInput("")
-      // trash the previous fetched cache and get new one
-      void ctx.posts.getAll.invalidate()
+    onMutate: async ({ content }) => {
+      await ctx.posts.getAll.cancel()
+      const prevData = ctx.posts.getAll.getData()
+
+      ctx.posts.getAll.setData(undefined, (old) => {
+        const newPostMock = {
+          post: {
+            id: "newpost",
+            likeCount: 0,
+            viewCount: 0,
+            likedUsers: "nouser",
+            content: content,
+            authorId: user?.id ?? "",
+            createdAt: new Date(),
+          },
+          author: {
+            id: "",
+            authorName: user?.fullName ?? "",
+            username: user?.username ?? "",
+            profileImageUrl: user?.profileImageUrl ?? "",
+          },
+        }
+
+        if (!old) return [newPostMock]
+
+        return [newPostMock, ...old]
+      })
+
+      return { prevData }
     },
-    onError: (error) => {
+
+    onError: (error, newPost, context) => {
+      ctx.posts.getAll.setData(undefined, context?.prevData)
       const errorMessage = error.data?.zodError?.fieldErrors.content
       console.log("errorMessage", errorMessage)
       if (errorMessage && errorMessage[0]) {
@@ -41,6 +68,30 @@ const CreatPostWizard = () => {
         toast.error(error.message)
       }
     },
+
+    onSettled: (_, error) => {
+      void ctx.posts.getAll.invalidate()
+
+      if (error) return
+
+      toast.success("Posted!")
+      setInput("")
+    },
+
+    // onSuccess: () => {
+    //   setInput("")
+    //   // trash the previous fetched cache and get new one
+    //   void ctx.posts.getAll.invalidate()
+    // },
+    // onError: (error) => {
+    //   const errorMessage = error.data?.zodError?.fieldErrors.content
+    //   console.log("errorMessage", errorMessage)
+    //   if (errorMessage && errorMessage[0]) {
+    //     toast.error(errorMessage[0])
+    //   } else {
+    //     toast.error(error.message)
+    //   }
+    // },
   })
 
   // click away to close the emoji picker
@@ -104,7 +155,7 @@ const CreatPostWizard = () => {
               mutate({ content: input })
             }}>
             {isPosting ? (
-              <div className="text-slate-50">
+              <div className="text-slate-50 ">
                 <LoadingSpinner size={24} />
               </div>
             ) : (
@@ -140,37 +191,20 @@ const CreatPostWizard = () => {
 }
 
 const PostFeed = () => {
-  const { data, isLoading: postsLoading } = api.posts.getAll.useQuery()
-  const [autoAnimateparent] = useAutoAnimate()
+  const { data, isLoading } = api.posts.getAll.useQuery()
+  const [animationParent] = useAutoAnimate()
 
-  if (postsLoading) return <LoadingPage />
-  if (!data) return <div>somehting went wrong</div>
+  if (isLoading) return <LoadingPage />
+  if (!data)
+    return <div className="py-20 text-center">somehting went wrong</div>
 
   return (
-    <div className="flex flex-col" ref={autoAnimateparent}>
+    <div className="flex flex-col" ref={animationParent}>
       {data.map((fullpost) => (
         <PostView {...fullpost} key={fullpost.post.id} />
       ))}
     </div>
   )
-}
-
-// const Navbar = () => {
-//   return (
-//     <div className="h-20 ">
-//       <div className=" fixed z-20 flex h-[inherit]  items-center border-b border-slate-600 bg-stone-900 bg-opacity-60 p-3 backdrop-blur-sm">
-//         <div>
-//           <div className="pl-4 text-2xl font-semibold">Home</div>
-//         </div>
-//       </div>
-//     </div>
-//   )
-// }
-
-const TestCounter = () => {
-  const ctx = api.useContext()
-
-  return <div></div>
 }
 
 const Home: NextPage = () => {

@@ -5,7 +5,7 @@ import useUserDetails from "../hooks/useUserDetails"
 
 import Link from "next/link"
 import { FaHashtag, FaInfo } from "react-icons/fa"
-import { BiLogOutCircle } from "react-icons/bi"
+import { SlLogout } from "react-icons/sl"
 import BirdAppIcon from "./BirdAppIcon"
 
 const MobileMenuProfile = (props: {
@@ -18,27 +18,35 @@ const MobileMenuProfile = (props: {
   }
 
   return (
-    <div>
+    <div className="flex w-full items-center justify-start space-y-2 ">
       {isSignedIn && (
         <div>
-          <div className="flex items-center justify-start space-x-2">
+          <div className="group flex space-x-2">
             <div className="flex w-12 justify-center">
-              <UserButton />
+              <div className="flex h-8 w-8 items-center justify-center rounded-full border-[1px] border-slate-100 transition-colors hover:cursor-pointer group-hover:border-violet-400">
+                <UserButton />
+              </div>
             </div>
-            <div className="my-4 flex flex-col">
-              <div className="text-md truncate text-clip">{fullName}</div>
+            <div className="flex flex-col">
+              <p className="text-md truncate text-clip group-hover:text-violet-400">
+                {fullName}
+              </p>
               <div className="text-sm text-slate-500">{`@${username}`}</div>
             </div>
           </div>
           <SignOutButton>
             <div
-              className="flex items-center space-x-2 hover:cursor-pointer hover:text-violet-400"
+              className="group flex w-full items-center space-x-2 transition hover:cursor-pointer "
               onClick={handleClick}>
-              <div className="flex w-12 justify-center ">
-                <BiLogOutCircle size={36} />
+              <div className="flex w-12 items-center justify-center">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full border-[1px] border-slate-100 transition-colors group-hover:border-violet-400">
+                  <div className="-translate-x-[2px] transition-colors group-hover:text-violet-400">
+                    <SlLogout size={16} />
+                  </div>
+                </div>
               </div>
-              <div className="">
-                <div className="">Sign Out</div>
+              <div className="transition-colors group-hover:text-violet-400">
+                Sign Out
               </div>
             </div>
           </SignOutButton>
@@ -50,30 +58,30 @@ const MobileMenuProfile = (props: {
 
 const MobileMenuItems = () => {
   return (
-    <section className=" flex flex-col space-y-6">
+    <section className="group flex flex-col space-y-6 ">
       <Link href="/">
         <div className="flex items-center space-x-2">
           <div className="flex w-12 justify-center">
             <BirdAppIcon size={42} />
           </div>
-          <p className="text-xl">Bird App</p>
+          <p className="custom-gradient w-24 text-xl ">Bird App</p>
         </div>
       </Link>
       <div className="flex flex-col space-y-4">
         <div className=" flex items-center space-x-2">
-          <div className=" flex w-12 justify-center">
+          <div className="flex w-12 justify-center">
             <FaHashtag size={36} />
           </div>
-          <p className="text-xl">Emojis Only!</p>
+          <p className="w-24 text-xl">Emojis Only!</p>
         </div>
       </div>
       <Link href="/about">
         <div className="flex flex-col space-y-4">
           <div className="flex items-center space-x-2">
-            <div className="  flex w-12 justify-center">
+            <div className="flex w-12 justify-center">
               <FaInfo size={36} />
             </div>
-            <p className="text-xl">About</p>
+            <p className="w-24 text-xl">About</p>
           </div>
         </div>
       </Link>
@@ -150,9 +158,9 @@ const MobileMenu = (props: {
         className={`h1 fixed right-0 z-50 h-[100svh] w-[50%] border-l-[0.5px] border-slate-600 bg-zinc-900 transition  md:hidden ${
           showComponent ? "" : "translate-x-[100%]"
         }`}>
-        <div className="flex h-12 justify-end p-4">
+        <div className="flex h-12 justify-end px-4">
           <button
-            className="transition hover:scale-110"
+            className=" transition hover:scale-110"
             onClick={closeMobileMenu}>
             <AiOutlineClose size={28} />
           </button>

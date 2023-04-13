@@ -9,7 +9,6 @@ const Navbar = (props: {
 }) => {
   const { showMobileMenu, setShowMobileMenu } = props
   const [animationParent] = useAutoAnimate()
-  const title = "Profile"
 
   return (
     <div className="custom-backdrop flex h-[inherit] items-center justify-between border-b  border-slate-600 px-4">
@@ -17,7 +16,7 @@ const Navbar = (props: {
         <div className="text-violet-400 sm:hidden">
           <GiChicken size={28} />
         </div>
-        <div className=" text-xl font-semibold sm:text-2xl">
+        <div className=" text-xl font-semibold sm:text-2xl ">
           {props.navbarTitle}
         </div>
       </div>

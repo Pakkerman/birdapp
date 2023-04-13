@@ -10,9 +10,10 @@ import { useUser } from "@clerk/nextjs"
 import { AiOutlineClose, AiOutlineHeart, AiFillHeart } from "react-icons/ai"
 import { IoIosStats } from "react-icons/io"
 
-import { LoadingSpinner } from "./loading"
 import { useAutoAnimate } from "@formkit/auto-animate/react"
 import { getRelativeTime } from "~/utils/getRelativeTime"
+
+import unknownUserImage from "public/images/unknownUser.png"
 
 // timecode 49:15
 type PostWithUser = RouterOutputs["posts"]["getAll"][number]
@@ -28,10 +29,17 @@ const DeletePostWizard = (props: { postId: string; authorId: string }) => {
 
   if (!user || user.id != props.authorId) return <div></div>
 
-  const { mutate, isLoading } = api.posts.deletePostById.useMutation({
-    onSuccess: () => {
-      toast.success("Post deleted!")
-      void ctx.posts.getAll.invalidate()
+  const { mutate } = api.posts.deletePostById.useMutation({
+    onMutate: async ({ postId }) => {
+      await ctx.posts.getAll.cancel()
+
+      const prevData = ctx.posts.getAll.getData()
+      ctx.posts.getAll.setData(undefined, (old) => {
+        if (!old) return []
+        return [...old.filter((item) => item.post.id !== postId)]
+      })
+
+      return { prevData }
     },
     onError: (error) => {
       const errorMessage = error.data?.zodError?.fieldErrors.content
@@ -42,13 +50,18 @@ const DeletePostWizard = (props: { postId: string; authorId: string }) => {
         toast.error("Failed to post! Please try again later!")
       }
     },
+
+    onSettled: () => {
+      toast.success("Post Deleted!")
+      void ctx.posts.getAll.invalidate()
+    },
   })
 
   return (
     <div
       className="cursor-pointer text-slate-600 transition-colors duration-200 hover:text-red-400 active:text-slate-600 "
       onClick={() => mutate({ postId: props.postId })}>
-      {isLoading ? <LoadingSpinner size={24} /> : <AiOutlineClose size={24} />}
+      <AiOutlineClose size={24} />
     </div>
   )
 }
@@ -132,7 +145,7 @@ const PostView = (props: PostWithUser) => {
   return (
     <div className="flex space-x-4 border-b border-slate-600 p-4" key={post.id}>
       <Image
-        src={author.profileImageUrl}
+        src={author.profileImageUrl ?? unknownUserImage}
         alt={`@${author.username}'s profile picture`}
         className="h-[56px] w-[56px] rounded-full"
         width={56}
