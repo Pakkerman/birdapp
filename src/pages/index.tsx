@@ -17,9 +17,11 @@ import toast from "react-hot-toast"
 import EmojiPicker, { Theme, EmojiStyle } from "emoji-picker-react"
 import { MdOutlineEmojiEmotions } from "react-icons/md"
 import { useAutoAnimate } from "@formkit/auto-animate/react"
+import useUserDetails from "~/hooks/useUserDetails"
 
 const CreatPostWizard = () => {
   const { user } = useUser()
+  const { fullName, username } = useUserDetails()
 
   const [input, setInput] = useState<string>("")
   const [showEmojiKeyboard, setShowEmojiKeyboard] = useState<boolean>(false)
@@ -34,18 +36,18 @@ const CreatPostWizard = () => {
       ctx.posts.getAll.setData(undefined, (old) => {
         const newPostMock = {
           post: {
-            id: "newpost",
+            id: Math.random().toString(),
             likeCount: 0,
             viewCount: 0,
-            likedUsers: "nouser",
+            likedUsers: [],
             content: content,
             authorId: user?.id ?? "",
             createdAt: new Date(),
           },
           author: {
             id: "",
-            authorName: user?.fullName ?? "",
-            username: user?.username ?? "",
+            authorName: fullName ?? "",
+            username: username ?? "",
             profileImageUrl: user?.profileImageUrl ?? "",
           },
         }
@@ -75,23 +77,8 @@ const CreatPostWizard = () => {
       if (error) return
 
       toast.success("Posted!")
-      setInput("")
+      // setInput("")
     },
-
-    // onSuccess: () => {
-    //   setInput("")
-    //   // trash the previous fetched cache and get new one
-    //   void ctx.posts.getAll.invalidate()
-    // },
-    // onError: (error) => {
-    //   const errorMessage = error.data?.zodError?.fieldErrors.content
-    //   console.log("errorMessage", errorMessage)
-    //   if (errorMessage && errorMessage[0]) {
-    //     toast.error(errorMessage[0])
-    //   } else {
-    //     toast.error(error.message)
-    //   }
-    // },
   })
 
   // click away to close the emoji picker
@@ -148,7 +135,7 @@ const CreatPostWizard = () => {
           </button>
 
           <button
-            className="w-18 flex flex-[0_0_75px] items-center justify-center rounded-md bg-violet-600 p-2 text-slate-50 transition-colors disabled:bg-violet-800 disabled:text-slate-400"
+            className="w-18 z-50 flex flex-[0_0_75px] items-center justify-center rounded-md bg-violet-600 p-2 text-slate-50 transition-colors disabled:bg-violet-800 disabled:text-slate-400"
             disabled={isPosting || input === ""}
             onClick={() => {
               setShowEmojiKeyboard(false)
@@ -169,11 +156,9 @@ const CreatPostWizard = () => {
             className="fixed left-0 top-0 z-10 h-screen w-screen"
           />
         )}
-        <div className="relative">
-          <div
-            className={`absolute left-[-50px] top-[-40px] z-20 scale-75 overflow-hidden rounded-xl border-2 border-violet-900 transition ${
-              showEmojiKeyboard ? "visible" : "invisible"
-            } `}>
+        <div
+          className={`relative ${showEmojiKeyboard ? "visible" : "invisible"}`}>
+          <div className="absolute left-[-50px] top-[-40px] z-20 scale-75 overflow-hidden rounded-xl border-2 border-violet-900 transition ">
             <EmojiPicker
               height={400}
               width={300}
@@ -195,8 +180,9 @@ const PostFeed = () => {
   const [animationParent] = useAutoAnimate()
 
   if (isLoading) return <LoadingPage />
-  if (!data)
+  if (!data) {
     return <div className="py-20 text-center">somehting went wrong</div>
+  }
 
   return (
     <div className="flex flex-col" ref={animationParent}>

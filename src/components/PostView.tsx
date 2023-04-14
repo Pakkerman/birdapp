@@ -67,7 +67,7 @@ const DeletePostWizard = (props: { postId: string; authorId: string }) => {
 }
 
 const PostActions = (props: {
-  currentUser: string | null
+  currentUser: string
   postId: string
   likeCount: number
   viewCount: number
@@ -83,21 +83,58 @@ const PostActions = (props: {
   }
 
   const { mutate } = api.posts.likePost.useMutation({
-    onSuccess: () => {
+    onMutate: async ({ postId, currentUser }) => {
+      await ctx.posts.getAll.cancel()
+
+      const prevPosts = ctx.posts.getAll.getData()
+      ctx.posts.getAll.setData(undefined, (old) => {
+        const newData = old?.map((item) => {
+          if (item.post.id === postId) {
+            const likedUsers = item.post.likedUsers as string[]
+            const modifyCount = likedUsers.includes(currentUser)
+            const likeCount = likedUsers.length
+
+            return {
+              author: { ...item.author },
+              post: {
+                ...item.post,
+                likeCount: modifyCount ? likeCount - 1 : likeCount + 1,
+                likedUsers: modifyCount
+                  ? [...likedUsers.filter((item) => item !== currentUser)]
+                  : [...likedUsers, currentUser],
+              },
+            }
+          }
+          return item
+        })
+
+        return newData
+      })
+      return { prevPosts }
+    },
+
+    onError: (error) => {
+      return
+    },
+
+    onSettled: () => {
       void ctx.posts.getAll.invalidate()
       const message = liked ? "Unlike emote!" : "Like Emote"
       toast.success(message)
     },
-    onError: (error) => {
-      const errorMessage = error.data?.zodError?.fieldErrors.content
-      console.log("errorMessage", errorMessage)
-      if (errorMessage && errorMessage[0]) {
-        toast.error(errorMessage[0])
-      } else {
-        toast.error("Action failed! Please try again later!")
-      }
-      toast.error("Action Failed! Please try again later!")
-    },
+
+    // onSuccess: () => {
+    // },
+    // onError: (error) => {
+    //   const errorMessage = error.data?.zodError?.fieldErrors.content
+    //   console.log("errorMessage", errorMessage)
+    //   if (errorMessage && errorMessage[0]) {
+    //     toast.error(errorMessage[0])
+    //   } else {
+    //     toast.error("Action failed! Please try again later!")
+    //   }
+    //   toast.error("Action Failed! Please try again later!")
+    // },
   })
 
   return (
@@ -174,7 +211,7 @@ const PostView = (props: PostWithUser) => {
           <span className="text-xl">{post.content}</span>
         </Link>
         <PostActions
-          currentUser={user?.username ?? null}
+          currentUser={user?.username ?? ""}
           postId={post.id}
           likedUsers={post.likedUsers as string[]}
           likeCount={post.likeCount ?? 0}

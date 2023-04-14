@@ -11,7 +11,6 @@ import { Ratelimit } from "@upstash/ratelimit"
 import { Redis } from "@upstash/redis"
 import { filterUserForClient } from "~/server/helpers/filterUserForClients"
 import type { Post, Prisma } from "@prisma/client"
-import unknownUser from "/public/images/unknownUser.png"
 
 const addUserDataToPost = async (posts: Post[]) => {
   const users = (
@@ -29,7 +28,7 @@ const addUserDataToPost = async (posts: Post[]) => {
         post,
         author: {
           id: "deleted-user",
-          profileImageUrl: unknownUser,
+          profileImageUrl: "/public/images/unknownUser.png",
           username: "unknown",
           authorName: "Unknown User",
         },

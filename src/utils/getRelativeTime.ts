@@ -5,7 +5,9 @@ import updateLocale from "dayjs/plugin/updateLocale"
 dayjs.extend(relativeTime)
 dayjs.extend(updateLocale)
 
-export function getRelativeTime(timeString: Date) {
+export function getRelativeTime(timeString: Date | undefined) {
+  if (timeString == undefined) return "Now"
+
   dayjs.updateLocale("en", {
     relativeTime: {
       past: "%s",
