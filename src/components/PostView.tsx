@@ -30,6 +30,7 @@ const DeletePostWizard = (props: { postId: string; authorId: string }) => {
   if (!user || user.id != props.authorId) return <div></div>
 
   const { mutate } = api.posts.deletePostById.useMutation({
+    // Optimistic update
     onMutate: async ({ postId }) => {
       await ctx.posts.getAll.cancel()
 
@@ -41,7 +42,8 @@ const DeletePostWizard = (props: { postId: string; authorId: string }) => {
 
       return { prevData }
     },
-    onError: (error) => {
+    onError: (error, _, context) => {
+      ctx.posts.getAll.setData(undefined, context?.prevData)
       const errorMessage = error.data?.zodError?.fieldErrors.content
       console.log("errorMessage", errorMessage)
       if (errorMessage && errorMessage[0]) {
@@ -53,7 +55,7 @@ const DeletePostWizard = (props: { postId: string; authorId: string }) => {
 
     onSettled: () => {
       toast.success("Post Deleted!")
-      void ctx.posts.getAll.invalidate()
+      void ctx.posts.invalidate()
     },
   })
 
@@ -114,27 +116,21 @@ const PostActions = (props: {
     },
 
     onError: (error) => {
-      return
+      const errorMessage = error.data?.zodError?.fieldErrors.content
+      console.log("errorMessage", errorMessage)
+      if (errorMessage && errorMessage[0]) {
+        toast.error(errorMessage[0])
+      } else {
+        toast.error("Action failed! Please try again later!")
+      }
+      toast.error("Action Failed! Please try again later!")
     },
 
     onSettled: () => {
-      void ctx.posts.getAll.invalidate()
+      void ctx.posts.invalidate()
       const message = liked ? "Unlike emote!" : "Like Emote"
-      toast.success(message)
+      toast.success(message, { id: "likeButton" })
     },
-
-    // onSuccess: () => {
-    // },
-    // onError: (error) => {
-    //   const errorMessage = error.data?.zodError?.fieldErrors.content
-    //   console.log("errorMessage", errorMessage)
-    //   if (errorMessage && errorMessage[0]) {
-    //     toast.error(errorMessage[0])
-    //   } else {
-    //     toast.error("Action failed! Please try again later!")
-    //   }
-    //   toast.error("Action Failed! Please try again later!")
-    // },
   })
 
   return (
@@ -146,7 +142,7 @@ const PostActions = (props: {
         }`}>
         <button
           onClick={() => {
-            if (!currentUser) return
+            if (!currentUser) return toast.error("Sign in to like posts!")
             mutate({ postId, currentUser })
           }}>
           <div>

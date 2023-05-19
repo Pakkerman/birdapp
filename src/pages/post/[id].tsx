@@ -9,6 +9,19 @@ import Link from "next/link"
 
 import { AiOutlineArrowLeft } from "react-icons/ai"
 
+const FeedHeader = (props: { authorName: string }) => {
+  return (
+    <div className="flex h-20 items-center border-b border-slate-600 p-3">
+      <Link href="/">
+        <AiOutlineArrowLeft size={24} />
+      </Link>
+      <div className="pl-4 text-2xl font-semibold">
+        Post by {props.authorName}
+      </div>
+    </div>
+  )
+}
+
 const SinglePostPage: NextPage<{ id: string }> = ({ id }) => {
   const { data } = api.posts.getById.useQuery({
     id,
@@ -29,14 +42,7 @@ const SinglePostPage: NextPage<{ id: string }> = ({ id }) => {
       <main>
         <div className="flex w-screen justify-center">
           <PageLayout navbarTitle="Emotes">
-            <div className="flex h-20 items-center border-b border-slate-600 p-3">
-              <Link href="/">
-                <AiOutlineArrowLeft size={24} />
-              </Link>
-              <div className="pl-4 text-2xl font-semibold">
-                Post by {data.author.authorName}
-              </div>
-            </div>
+            <FeedHeader authorName={data.author.authorName ?? ""} />
             <PostView {...data} />
           </PageLayout>
         </div>

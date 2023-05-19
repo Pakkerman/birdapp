@@ -60,14 +60,16 @@ const CreatPostWizard = () => {
       return { prevData }
     },
 
-    onError: (error, newPost, context) => {
+    onError: (error, _, context) => {
       ctx.posts.getAll.setData(undefined, context?.prevData)
       const errorMessage = error.data?.zodError?.fieldErrors.content
       console.log("errorMessage", errorMessage)
       if (errorMessage && errorMessage[0]) {
-        toast.error(errorMessage[0])
+        toast.dismiss("createPostWizardError")
+        toast.error(errorMessage[0], { id: "createPostWizardError" })
       } else {
-        toast.error(error.message)
+        toast.dismiss("createPostWizardError")
+        toast.error(error.message, { id: "createPostWizardError" })
       }
     },
 
@@ -75,7 +77,6 @@ const CreatPostWizard = () => {
       void ctx.posts.getAll.invalidate()
 
       if (error) return
-
       toast.success("Posted!")
       // setInput("")
     },
